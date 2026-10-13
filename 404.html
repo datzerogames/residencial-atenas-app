@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head><script>/* Endereços da demo abrem a demo (o GitHub Pages só usa o 404.html da raiz) */(function(){var b="/residencial-atenas-app/demo";if(location.pathname.indexOf(b)===0){location.replace(b+"/?ir="+encodeURIComponent(location.pathname.slice(b.length)||"/")+(location.search?"&"+location.search.slice(1):""));}})();</script>
+    <meta charset="utf-8" />
+    <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Residencial Atenas</title>
+    <!-- The `react-native-web` recommended style reset: https://necolas.github.io/react-native-web/docs/setup/#root-element -->
+    <style id="expo-reset">
+      /* These styles make the body full-height */
+      html,
+      body {
+        height: 100%;
+      }
+      /* These styles disable body scrolling if you are using <ScrollView> */
+      body {
+        overflow: hidden;
+      }
+      /* These styles make the root element full-height */
+      #root {
+        display: flex;
+        height: 100%;
+        flex: 1;
+      }
+    </style>
+  <link rel="icon" href="/residencial-atenas-app/favicon.ico"/>
+    <script>(function(){var q=new URLSearchParams(location.search),p=q.get("ir");if(p){q.delete("ir");var r=q.toString();history.replaceState(null,"","/residencial-atenas-app"+p+(r?"?"+r:""));}})();</script>
+    <link rel="manifest" href="/residencial-atenas-app/manifest.json" />
+    <meta name="theme-color" content="#0D0D0D" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Atenas" />
+    <link rel="apple-touch-icon" href="/residencial-atenas-app/pwa/icone-180.png" />
+    <script>if ('serviceWorker' in navigator) window.addEventListener('load', () => navigator.serviceWorker.register('/residencial-atenas-app/sw.js', { scope: '/residencial-atenas-app/' }).catch(() => {}));</script>
+</head>
+
+  <body>
+    <!-- Use static rendering with Expo Router to support running without JavaScript. -->
+    <noscript>
+      You need to enable JavaScript to run this app.
+    </noscript>
+    <!-- The root element for your Expo app. -->
+    <div id="root"></div>
+  <script src="/residencial-atenas-app/_expo/static/js/web/entry-4576cbaa6201dd262f9450cb20966b2e.js" defer></script>
+</body>
+</html>

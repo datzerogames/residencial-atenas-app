@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Residencial Atenas · Demonstração</title>
+  <link rel="icon" href="favicon.ico" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    /* Moldura de celular para apresentar o app no computador. */
+    :root {
+      --navy: #0F2537; --navy2: #1B3A52; --verde: #0D9468; --verde-escuro: #006C4A; --menta: #85F5C1;
+      --texto: #101D27; --suave: #5A6773; --fundo: #F6F9FF; --borda: #E2E8F0;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; }
+    body {
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif; color: var(--texto);
+      background: radial-gradient(circle at 15% 20%, #E2EFFE 0%, transparent 45%),
+                  radial-gradient(circle at 85% 85%, #DDF7EC 0%, transparent 40%), var(--fundo);
+      display: flex; align-items: center; justify-content: center; gap: 72px; padding: 24px; overflow: auto;
+    }
+
+    /* Painel lateral */
+    .painel { width: 360px; display: flex; flex-direction: column; gap: 22px; }
+    .marca { display: flex; align-items: center; gap: 14px; }
+    .marca img { width: 56px; height: 56px; border-radius: 14px; background: #fff; box-shadow: 0 4px 14px rgba(15,37,55,.08); }
+    .marca h1 { font-size: 28px; font-weight: 700; color: var(--navy); line-height: 1.1; }
+    .marca p { font-size: 14px; color: var(--suave); }
+    .chip { display: inline-flex; align-items: center; gap: 8px; align-self: flex-start; background: var(--menta); color: var(--verde-escuro);
+      font-size: 13px; font-weight: 600; padding: 6px 14px; border-radius: 999px; }
+    .chip::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--verde-escuro); }
+    .descricao { font-size: 15px; line-height: 1.6; color: var(--suave); }
+    .titulo { font-size: 12px; font-weight: 600; letter-spacing: .08em; color: var(--suave); text-transform: uppercase; }
+    .perfis { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .perfil { display: flex; align-items: center; gap: 10px; padding: 12px; border-radius: 14px; border: 1px solid var(--borda);
+      background: #fff; cursor: pointer; text-align: left; font-family: inherit; transition: transform .12s, box-shadow .12s, border-color .12s; }
+    .perfil:hover { transform: translateY(-2px); box-shadow: 0 10px 25px -5px rgba(15,37,55,.1); }
+    .perfil.ativo { border-color: var(--verde); box-shadow: 0 0 0 2px var(--menta); }
+    .perfil .ico { width: 38px; height: 38px; border-radius: 10px; display: grid; place-items: center; font-size: 20px; flex-shrink: 0; }
+    .perfil b { display: block; font-size: 14px; font-weight: 600; color: var(--texto); }
+    .perfil span { display: block; font-size: 12px; color: var(--suave); }
+    .temas { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+    .tema { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 10px 6px; border-radius: 12px; border: 2px solid var(--borda); background: #fff; cursor: pointer; font-family: inherit; font-size: 12px; font-weight: 600; color: var(--texto); }
+    .tema.ativo { border-color: var(--t); box-shadow: 0 0 0 2px color-mix(in srgb, var(--t) 25%, transparent); }
+    .tema .bolas { display: flex; }
+    .tema .bolas i { width: 22px; height: 22px; border-radius: 50%; border: 2px solid #fff; }
+    .tema .bolas i + i { margin-left: -7px; }
+    .origem { margin-top: 10px; font-size: 13px; line-height: 1.5; color: var(--suave); background: #fff; border: 1px solid var(--borda); border-radius: 12px; padding: 10px 12px; }
+    .origem b { color: var(--texto); }
+    .tema { font-size: 11px !important; }
+    .dica { background: #fff; border: 1px solid var(--borda); border-radius: 14px; padding: 14px 16px; font-size: 13px; line-height: 1.55; color: var(--suave); }
+    .dica b { color: var(--texto); }
+    .acoes { display: flex; gap: 10px; }
+    .botao { flex: 1; height: 44px; border-radius: 12px; border: 1px solid #CBD5E1; background: transparent; color: var(--navy);
+      font-family: inherit; font-size: 14px; font-weight: 600; cursor: pointer; }
+    .botao:hover { background: #ECF5FF; }
+    .botao.cheio { background: var(--navy); color: #fff; border-color: var(--navy); }
+    .botao.cheio:hover { background: #000F1D; }
+
+    /* Celular */
+    .palco { flex-shrink: 0; transform-origin: center center; }
+    .celular {
+      width: 414px; height: 868px; border-radius: 62px; padding: 12px; position: relative;
+      background: linear-gradient(145deg, #2A3B4A, #0B1620 60%, #1D2C38);
+      box-shadow: 0 0 0 2px #3C4D5C inset, 0 40px 80px -20px rgba(15,37,55,.45), 0 18px 36px -18px rgba(15,37,55,.35);
+    }
+    /* Botões laterais */
+    .celular::before, .celular::after { content: ''; position: absolute; width: 4px; border-radius: 2px; background: #1D2C38; }
+    .celular::before { left: -4px; top: 170px; height: 64px; box-shadow: 0 84px 0 #1D2C38; }
+    .celular::after { right: -4px; top: 220px; height: 96px; }
+    .tela { width: 100%; height: 100%; border-radius: 50px; overflow: hidden; background: #fff; position: relative; display: flex; flex-direction: column; }
+    .status { height: 48px; flex-shrink: 0; display: flex; align-items: center; justify-content: space-between; padding: 6px 30px 0 34px;
+      font-size: 15px; font-weight: 600; color: var(--texto); background: #fff; position: relative; z-index: 2; }
+    .ilha { position: absolute; left: 50%; top: 11px; transform: translateX(-50%); width: 122px; height: 34px; border-radius: 20px; background: #000; }
+    .ilha::after { content: ''; position: absolute; right: 14px; top: 11px; width: 12px; height: 12px; border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, #3B5B7A, #0B1620 65%); }
+    .icones { display: flex; align-items: center; gap: 6px; }
+    iframe { flex: 1; width: 100%; border: 0; display: block; background: var(--fundo); }
+    .base { height: 22px; flex-shrink: 0; background: #fff; }
+    .home { position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); width: 134px; height: 5px; border-radius: 3px;
+      background: rgba(16,29,39,.85); z-index: 3; pointer-events: none; }
+
+    @media (max-width: 980px) { .painel { display: none; } body { gap: 0; } }
+  </style>
+</head>
+<body>
+  <aside class="painel">
+    <div class="marca">
+      <img src="assets/logo.png" alt="" onerror="this.style.display='none'" />
+      <div>
+        <h1>Residencial Atenas</h1>
+        <p>Engenho da Rainha · Rio de Janeiro</p>
+      </div>
+    </div>
+    <span class="chip">Demonstração interativa</span>
+    <p class="descricao">
+      Encomendas com aviso no celular, reserva do salão com PIX, chamados para a zeladoria,
+      status da piscina e entrada de visitantes por QR Code, tudo num app só.
+    </p>
+
+    <div>
+      <p class="titulo" style="margin-bottom:10px">Ver o app como</p>
+      <div class="perfis">
+        <button class="perfil" data-id="m1" data-rota="/morador">
+          <div class="ico" style="background:#ECF5FF">🏠</div><div><b>Morador</b><span>Rodrigo · 402B</span></div>
+        </button>
+        <button class="perfil" data-id="p1" data-rota="/portaria">
+          <div class="ico" style="background:#85F5C1">🛡️</div><div><b>Portaria</b><span>Carlos</span></div>
+        </button>
+        <button class="perfil" data-id="a2" data-rota="/admin">
+          <div class="ico" style="background:#DBEAFE">💼</div><div><b>Secretaria</b><span>Márcia</span></div>
+        </button>
+        <button class="perfil" data-id="z1" data-rota="/zelador">
+          <div class="ico" style="background:#FFE8D6">🔧</div><div><b>Zeladoria</b><span>Marcos</span></div>
+        </button>
+      </div>
+    </div>
+
+    <div>
+      <p class="titulo" style="margin-bottom:10px">Tema de cores (inspirado em Atenas)</p>
+      <div class="temas" id="temas"></div>
+      <p class="origem" id="origemTema"></p>
+    </div>
+
+    <div class="dica">
+      <b>Experimente:</b> como <b>Portaria</b>, registre uma encomenda para o Bloco B, apto 402.
+      Depois clique em <b>Morador</b> e veja a notificação chegando no sininho.
+    </div>
+
+    <div class="acoes">
+      <button class="botao" id="inicio">Tela de login</button>
+      <button class="botao cheio" id="reiniciar">Reiniciar demo</button>
+    </div>
+  </aside>
+
+  <div class="palco" id="palco">
+    <div class="celular">
+      <div class="tela">
+        <div class="status">
+          <span id="hora">9:41</span>
+          <div class="ilha"></div>
+          <div class="icones" aria-hidden="true">
+            <svg width="18" height="12" viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx="1" fill="#101D27"/><rect x="5" y="5.5" width="3" height="6.5" rx="1" fill="#101D27"/><rect x="10" y="3" width="3" height="9" rx="1" fill="#101D27"/><rect x="15" y="0" width="3" height="12" rx="1" fill="#101D27"/></svg>
+            <svg width="16" height="12" viewBox="0 0 16 12"><path d="M8 11.5 5.6 9a3.4 3.4 0 0 1 4.8 0L8 11.5Zm-4.2-4.3L2.2 5.6a8.2 8.2 0 0 1 11.6 0l-1.6 1.6a5.9 5.9 0 0 0-8.4 0ZM.6 4 0 3.4a11.3 11.3 0 0 1 16 0l-.6.6-.9.9a10 10 0 0 0-13 0L.6 4Z" fill="#101D27"/></svg>
+            <svg width="27" height="13" viewBox="0 0 27 13"><rect x=".5" y=".5" width="23" height="12" rx="3.5" fill="none" stroke="#101D27" opacity=".4"/><rect x="2" y="2" width="18" height="9" rx="2" fill="#101D27"/><rect x="24.5" y="4.5" width="1.8" height="4" rx=".9" fill="#101D27" opacity=".4"/></svg>
+          </div>
+        </div>
+        <iframe id="app" title="Residencial Atenas"></iframe>
+        <div class="base"></div>
+        <div class="home"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const app = document.getElementById('app');
+    const CHAVE_USUARIO = 'meucondo:usuario:v1';
+    const CHAVE_DADOS = 'meucondo:dados:v11';
+    // Pasta onde o site está publicado (ex.: /residencial-atenas-app/demo) — vazio no computador.
+    const BASE = location.pathname.replace(/\/celular\.html.*$/, '').replace(/\/$/, '');
+
+    // Abre uma rota do app dentro do celular.
+    const abrir = (rota) => { app.src = BASE + rota + (rota.includes('?') ? '&' : '?') + 'moldura=1'; };
+
+    // Se o endereço veio com uma rota (ex.: /celular.html#/morador), abre direto nela.
+    if (location.hash.length > 1) abrir(location.hash.slice(1)); else abrir('/');
+
+    document.querySelectorAll('.perfil').forEach((b) => b.addEventListener('click', () => {
+      try { localStorage.setItem(CHAVE_USUARIO, b.dataset.id); } catch {}
+      abrir(b.dataset.rota);
+      marcarAtivo();
+    }));
+    document.getElementById('inicio').addEventListener('click', () => {
+      try { localStorage.removeItem(CHAVE_USUARIO); } catch {}
+      abrir('/');
+      marcarAtivo();
+    });
+    document.getElementById('reiniciar').addEventListener('click', () => {
+      if (!confirm('Reiniciar a demonstração? Tudo o que foi feito será apagado.')) return;
+      try { localStorage.removeItem(CHAVE_DADOS); localStorage.removeItem(CHAVE_USUARIO); } catch {}
+      abrir('/');
+      marcarAtivo();
+    });
+
+    // Destaca o perfil em uso (o app também pode trocar de perfil por dentro).
+    function marcarAtivo() {
+      let atual = null;
+      try { atual = localStorage.getItem(CHAVE_USUARIO); } catch {}
+      document.querySelectorAll('.perfil').forEach((b) => b.classList.toggle('ativo', b.dataset.id === atual));
+    }
+    marcarAtivo();
+    setInterval(marcarAtivo, 1000);
+
+    // Temas de cores: grava a escolha e recarrega o app no celular.
+    const TEMAS = [["vaso","Vaso grego","#0D0D0D","#FF4000","Os vasos gregos de “figuras negras” (séc. VI a.C.) eram pintados de preto sobre o barro alaranjado. O barro cozido ficava laranja e as figuras, pretas."],
+      ["egeu","Mar Egeu","#0B3D91","#1C6DD0","O Mar Egeu banha Atenas e as ilhas gregas, famosas pelas casas brancas com portas e cúpulas azuis."],
+      ["marmore","Mármore e Ouro","#2B2B2B","#B8901F","O Partenon foi erguido em mármore branco, e a grande estátua de Atena lá dentro era coberta de ouro."],
+      ["oliveira","Oliveira","#3E4A1F","#6B7F2A","Diz o mito que Atena deu uma oliveira aos atenienses — e por isso a cidade ganhou o nome dela."],
+      ["noite","Noite em Atenas","#14213D","#E8940C","À noite a Acrópole é iluminada em dourado e brilha sobre a cidade azul-escura."],
+      ["terracota","Terracota","#1F4E5A","#C65D2E","Telhas e ânforas gregas eram de terracota, o barro cozido que guardava azeite e vinho."],
+      ["santorini","Santorini","#3A1F3D","#E8576B","Em Santorini, o pôr do sol pinta de rosa e coral as casinhas brancas penduradas no penhasco."],
+      ["coruja","Coruja de Atena","#2F3A45","#4F7CAC","A coruja era o símbolo de Atena, deusa da sabedoria, e estampava as moedas de prata de Atenas."],
+      ["dionisio","Dionísio","#3B0D1C","#9E1B3C","Dionísio, deus do vinho, era festejado em Atenas com as festas onde nasceram as primeiras peças de teatro."],
+      ["olimpo","Louro do Olimpo","#1E3A2B","#2E7D4F","Os campeões dos Jogos Olímpicos da Grécia antiga ganhavam uma coroa de folhas — verde, com brilho de ouro."],
+      ["jonico","Mar Jônico","#0B4F5C","#0F9AA8","O Mar Jônico, na costa oeste da Grécia, tem águas turquesa tão claras que dá para ver o fundo."],
+      ["acropole","Acrópole","#3D2C5E","#7E5BC2","No fim da tarde, o mármore da Acrópole fica lilás e dourado com a luz do sol se pondo."]];
+    const CHAVE_TEMA = 'meucondo:tema';
+    function desenharTemas() {
+      let atual = 'vaso';
+      try { atual = localStorage.getItem(CHAVE_TEMA) || 'vaso'; } catch {}
+      document.getElementById('temas').innerHTML = TEMAS.map(([id, nome, a, b]) =>
+        '<button class="tema' + (id === atual ? ' ativo' : '') + '" style="--t:' + b + '" data-tema="' + id + '"><span class="bolas"><i style="background:' + a + '"></i><i style="background:' + b + '"></i></span>' + nome + '</button>').join('');
+      const t = TEMAS.find((x) => x[0] === atual) || TEMAS[0];
+      document.getElementById('origemTema').innerHTML = '<b>' + t[1] + ':</b> ' + t[4];
+      document.querySelectorAll('.tema').forEach((bt) => bt.addEventListener('click', () => {
+        try { localStorage.setItem(CHAVE_TEMA, bt.dataset.tema); } catch {}
+        app.contentWindow.location.reload();
+        desenharTemas();
+      }));
+    }
+    desenharTemas();
+
+    // Relógio da barra de status.
+    function relogio() {
+      const d = new Date();
+      document.getElementById('hora').textContent = d.getHours() + ':' + String(d.getMinutes()).padStart(2, '0');
+    }
+    relogio();
+    setInterval(relogio, 15000);
+
+    // Diminui o celular quando a janela é baixa, para caber inteiro.
+    function ajustar() {
+      const escala = Math.min(1, (window.innerHeight - 40) / 868, (window.innerWidth - 32) / 414);
+      document.getElementById('palco').style.transform = `scale(${escala})`;
+      document.getElementById('palco').style.margin = `${(868 * (escala - 1)) / 2}px ${(414 * (escala - 1)) / 2}px`;
+    }
+    ajustar();
+    window.addEventListener('resize', ajustar);
+  </script>
+</body>
+</html>
