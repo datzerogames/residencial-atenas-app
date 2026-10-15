@@ -1,4 +1,4 @@
-const CACHE = 'atenas-1792034681555';
+const CACHE = 'atenas-1792080668390';
 self.addEventListener('install', (e) => { self.skipWaiting(); });
 self.addEventListener('activate', (e) => {
   e.waitUntil(caches.keys().then((ks) => Promise.all(ks.filter((k) => k !== CACHE && k !== 'atenas-arquivos').map((k) => caches.delete(k)))).then(() => self.clients.claim()));
