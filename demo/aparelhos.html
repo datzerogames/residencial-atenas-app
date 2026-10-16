@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Residencial Atenas · Demonstração</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+  /* Vitrine da demonstração: o app dentro da moldura de celular (POCO), tablet ou computador. */
+  :root { --bg:#F5F3EF; --text:#0D0D0D; --soft:#6B635B; --border:#E4DDD3; --primary:#0D0D0D; --green:#FF4000; --surface2:#E7DFD4; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; height:100%; }
+  body { background:radial-gradient(circle at 50% 0%, #fff 0%, var(--bg) 60%); color:var(--text); font-family:'Plus Jakarta Sans',system-ui,sans-serif; display:flex; flex-direction:column; overflow:hidden; }
+  header { display:flex; align-items:center; gap:12px; padding:12px 16px; flex-wrap:wrap; justify-content:center; }
+  .marca { display:flex; align-items:center; gap:10px; margin-right:auto; }
+  .logo { width:38px; height:38px; border-radius:10px; background:var(--primary); display:grid; place-items:center; }
+  .marca b { display:block; font-size:16px; } .marca small { color:var(--soft); font-size:12px; }
+  .seletor { display:flex; gap:6px; background:var(--surface2); padding:5px; border-radius:999px; }
+  .seletor button { border:0; cursor:pointer; font:700 14px 'Plus Jakarta Sans'; height:38px; padding:0 16px; border-radius:999px; background:transparent; color:var(--text); display:flex; align-items:center; gap:6px; }
+  .seletor button.on { background:var(--primary); color:#fff; }
+  .cheia { font:700 13px 'Plus Jakarta Sans'; color:var(--green); text-decoration:none; padding:8px 12px; border-radius:999px; background:#FFE4D8; }
+  .palco { flex:1; display:flex; align-items:center; justify-content:center; overflow:hidden; padding:8px 16px 16px; }
+  .escala { transform-origin:center center; flex:none; }
+  /* Celular POCO: tela 393×873, borda fina e câmera em furo */
+  .celular { width:417px; height:897px; border-radius:52px; background:#111; padding:12px; position:relative; box-shadow:0 30px 60px -20px rgba(0,0,0,.45), inset 0 0 0 2px #333; }
+  .celular::before { content:''; position:absolute; top:24px; left:50%; width:12px; height:12px; margin-left:-6px; border-radius:50%; background:#000; box-shadow:0 0 0 2px #222; z-index:2; }
+  .celular::after { content:''; position:absolute; right:-4px; top:170px; width:4px; height:90px; border-radius:0 4px 4px 0; background:#222; }
+  .celular iframe { width:393px; height:873px; border-radius:40px; }
+  /* Tablet: tela 800×1280 */
+  .tablet { width:840px; height:1320px; border-radius:44px; background:#161616; padding:20px; box-shadow:0 30px 60px -20px rgba(0,0,0,.45), inset 0 0 0 2px #333; position:relative; }
+  .tablet::before { content:''; position:absolute; top:8px; left:50%; width:8px; height:8px; margin-left:-4px; border-radius:50%; background:#2a2a2a; }
+  .tablet iframe { width:800px; height:1280px; border-radius:22px; }
+  /* Computador: tela 1366×768 num monitor com pé */
+  .computador { display:flex; flex-direction:column; align-items:center; }
+  .monitor { width:1398px; height:800px; border-radius:20px; background:#141414; padding:16px; box-shadow:0 30px 60px -20px rgba(0,0,0,.45), inset 0 0 0 2px #2c2c2c; }
+  .monitor iframe { width:1366px; height:768px; border-radius:6px; }
+  .pe { width:180px; height:90px; background:linear-gradient(#d9d4cc,#c7c0b6); clip-path:polygon(25% 0,75% 0,90% 100%,10% 100%); }
+  .base { width:360px; height:16px; border-radius:10px; background:#bdb5aa; }
+  iframe { border:0; display:block; background:#fff; }
+  footer { text-align:center; font-size:12px; color:var(--soft); padding:0 16px 10px; }
+  @media (max-width:640px) { .marca small, .cheia { display:none; } .seletor button span.txt { display:none; } }
+</style>
+</head>
+<body>
+<header>
+  <div class="marca">
+    <div class="logo"><svg width="22" height="22" viewBox="0 0 24 24" fill="#FF4000"><path d="M12 2 2 7v2h20V7L12 2zM4 10v8h3v-8H4zm6.5 0v8h3v-8h-3zM17 10v8h3v-8h-3zM2 19v3h20v-3H2z"/></svg></div>
+    <div><b>Residencial Atenas</b><small>Demonstração do app</small></div>
+  </div>
+  <div class="seletor" role="tablist" aria-label="Ver em">
+    <button data-a="celular" role="tab">📱 <span class="txt">Celular</span></button>
+    <button data-a="tablet" role="tab">📟 <span class="txt">Tablet</span></button>
+    <button data-a="computador" role="tab">💻 <span class="txt">Computador</span></button>
+  </div>
+  <a class="cheia" id="cheia" href="./" target="_blank" rel="noopener">Abrir em tela cheia ↗</a>
+</header>
+<div class="palco" id="palco"><div class="escala" id="escala"></div></div>
+<footer>Dados de exemplo. Para entrar, use o “Acesso rápido da demonstração” na tela de login (senha 123456).</footer>
+
+<script>
+  // Endereço da demo: a mesma pasta desta página.
+  const base = location.pathname.replace(/[^/]*$/, '');
+  const app = base;
+  const MOLDES = {
+    celular: () => `<div class="celular"><iframe src="${app}" title="App no celular"></iframe></div>`,
+    tablet: () => `<div class="tablet"><iframe src="${app}" title="App no tablet"></iframe></div>`,
+    computador: () => `<div class="computador"><div class="monitor"><iframe src="${app}" title="App no computador"></iframe></div><div class="pe"></div><div class="base"></div></div>`,
+  };
+  const escala = document.getElementById('escala'), palco = document.getElementById('palco');
+  let atual = new URLSearchParams(location.search).get('aparelho');
+  try { atual = atual || localStorage.getItem('atenas:aparelho'); } catch {}
+  if (!MOLDES[atual]) atual = innerWidth < 700 ? 'celular' : 'computador';
+
+  function ajustar() {
+    const m = escala.firstElementChild; if (!m) return;
+    escala.style.transform = 'none';
+    const w = m.offsetWidth, h = m.offsetHeight;
+    const s = Math.min((palco.clientWidth - 32) / w, (palco.clientHeight - 16) / h, 1);
+    escala.style.width = w + 'px'; escala.style.height = h + 'px';
+    escala.style.transform = `scale(${s})`;
+  }
+  function mostrar(a) {
+    atual = a;
+    escala.innerHTML = MOLDES[a]();
+    document.querySelectorAll('.seletor button').forEach((b) => { b.classList.toggle('on', b.dataset.a === a); b.setAttribute('aria-selected', b.dataset.a === a); });
+    try { localStorage.setItem('atenas:aparelho', a); } catch {}
+    history.replaceState(null, '', '?aparelho=' + a);
+    requestAnimationFrame(ajustar);
+  }
+  document.querySelectorAll('.seletor button').forEach((b) => b.onclick = () => mostrar(b.dataset.a));
+  addEventListener('resize', ajustar);
+  mostrar(atual);
+</script>
+</body>
+</html>
