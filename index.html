@@ -294,5 +294,71 @@
   var t = setInterval(function () { n++; if (rotular() || n > 60) clearInterval(t); }, 500);
 })();
 </script>
+<script>
+(function () {
+  if (window.innerWidth < 1000) return;
+  var NOMES = ['Painel', 'Chamados', 'Reservas', 'Cadastros', 'Conversas', 'Notificações', 'Emergência e alertas', 'Achados e perdidos', 'Advertências e multas', 'Alerta de temporal', 'Avisos', 'Comunidade', 'Configurações do condomínio', 'Enquetes e assembleias', 'Escala de serviço', 'Espaços para reservar', 'Infiltrações', 'Encomendas', 'Portão da garagem'];
+  var PRINCIPAIS = ['Painel', 'Chamados', 'Reservas', 'Cadastros', 'Conversas', 'Avisos', 'Comunidade', 'Configurações do condomínio'];
+  function linhaDe(el, nome) {
+    var cur = el;
+    while (cur.parentElement) {
+      var txt = cur.parentElement.textContent || '';
+      if (NOMES.some(function (n) { return n !== nome && txt.indexOf(n) >= 0; })) break;
+      cur = cur.parentElement;
+    }
+    return cur;
+  }
+  function montar() {
+    if (document.getElementById('trilho-menu')) return true;
+    var linhas = {};
+    PRINCIPAIS.forEach(function (nome) {
+      var melhor = null;
+      document.querySelectorAll('div,span').forEach(function (el) {
+        var t = el.textContent || '';
+        if (t.indexOf(nome) < 0) return;
+        if (!melhor || t.length < melhor.textContent.length) melhor = el;
+      });
+      if (melhor) linhas[nome] = linhaDe(melhor, nome);
+    });
+    var chaves = Object.keys(linhas);
+    if (chaves.length < 3) return false;
+    var lateral = linhas[chaves[0]];
+    while (lateral.parentElement && lateral.parentElement.getBoundingClientRect().width < 600) lateral = lateral.parentElement;
+    if (!lateral) return false;
+    var trilho = document.createElement('div');
+    trilho.id = 'trilho-menu';
+    trilho.style.cssText = 'position:fixed;top:0;left:0;bottom:0;width:64px;background:#0d0d0d;display:flex;flex-direction:column;align-items:center;gap:6px;padding-top:12px;z-index:1000;';
+    chaves.forEach(function (nome) {
+      var linha = linhas[nome];
+      var icone = linha.firstElementChild ? linha.firstElementChild.cloneNode(true) : document.createTextNode(nome.charAt(0));
+      var b = document.createElement('div');
+      b.className = 'botao-trilho';
+      b.title = nome;
+      b.style.cssText = 'width:42px;height:42px;border-radius:12px;display:grid;place-items:center;color:#bdb8b0;cursor:pointer;';
+      b.appendChild(icone);
+      b.addEventListener('click', function () { linha.click(); });
+      trilho.appendChild(b);
+    });
+    document.body.appendChild(trilho);
+    lateral.style.marginLeft = '64px';
+    function destacar() {
+      chaves.forEach(function (nome, i) {
+        var cor = getComputedStyle(linhas[nome]).backgroundColor;
+        var ativo = cor === 'rgb(255, 61, 0)';
+        var b = trilho.children[i];
+        b.style.background = ativo ? '#ff3d00' : 'transparent';
+        b.style.color = ativo ? '#ffffff' : '#bdb8b0';
+      });
+    }
+    destacar();
+    setInterval(destacar, 800);
+    return true;
+  }
+  var tentativas = 0;
+  var timer = setInterval(function () { tentativas++; if (montar() || tentativas > 60) clearInterval(timer); }, 500);
+})();
+</script>
+
+
 </body>
 </html>
