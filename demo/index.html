@@ -56,6 +56,7 @@
       if (txt !== 'MD' || el.querySelectorAll('*').length > 3) return;
       var r = el.getBoundingClientRect();
       if (r.width < 25 || r.width > 130) return;
+      if (el.parentElement && el.parentElement.closest('[data-foto-ok="' + d.length + '"]')) { el.style.backgroundImage = 'none'; el.style.backgroundColor = 'transparent'; el.style.color = 'transparent'; return; }
       el.dataset.fotoOk = d.length + '';
       el.style.backgroundImage = 'url("' + d + '")';
       el.style.backgroundSize = 'cover';
