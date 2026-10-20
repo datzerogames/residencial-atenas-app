@@ -186,5 +186,84 @@
   }
   setInterval(function () { login(); espacos(); }, 1000);
 })();
-</script></body>
+</script><script>
+(function () {
+  if (window.innerWidth < 1000) return;
+  var CHAVE = 'favoritosMenuResidencial';
+  var NOMES = ['Painel', 'Chamados', 'Reservas', 'Cadastros', 'Conversas', 'Notificações', 'Emergência e alertas', 'Achados e perdidos', 'Advertências e multas', 'Alerta de temporal', 'Avisos', 'Comunidade', 'Configurações do condomínio', 'Enquetes e assembleias', 'Escala de serviço', 'Espaços para reservar', 'Infiltrações', 'Encomendas', 'Portão da garagem'];
+  function favoritos() { try { return JSON.parse(localStorage.getItem(CHAVE) || '[]'); } catch (e) { return []; } }
+  function salvar(l) { try { localStorage.setItem(CHAVE, JSON.stringify(l)); } catch (e) {} }
+  function linhaDe(el, nome) {
+    var cur = el;
+    while (cur.parentElement) {
+      var p = cur.parentElement;
+      var txt = p.textContent || '';
+      var outros = NOMES.some(function (n) { return n !== nome && txt.indexOf(n) >= 0; });
+      if (outros) break;
+      cur = p;
+    }
+    return cur;
+  }
+  function montar() {
+    if (document.getElementById('busca-menu')) return true;
+    var linhas = {};
+    NOMES.forEach(function (nome) {
+      var melhor = null;
+      document.querySelectorAll('div,span').forEach(function (el) {
+        var t = el.textContent || '';
+        if (t.indexOf(nome) < 0) return;
+        if (!melhor || t.length < melhor.textContent.length) melhor = el;
+      });
+      if (melhor) {
+        var linha = linhaDe(melhor, nome);
+        if (linha && linha.parentElement && !Object.keys(linhas).some(function (k) { return linhas[k] === linha; })) linhas[nome] = linha;
+      }
+    });
+    var chaves = Object.keys(linhas);
+    if (chaves.length < 4) return false;
+    var pai = linhas[chaves[0]].parentElement;
+    var campo = document.createElement('input');
+    campo.id = 'busca-menu';
+    campo.placeholder = 'Buscar função...';
+    campo.style.cssText = 'width:calc(100% - 20px);margin:10px;padding:9px 12px;border-radius:10px;border:0;background:#1a1a1a;color:#fff;font-size:13px;outline:none;';
+    pai.insertBefore(campo, pai.firstChild);
+    function ordenar() {
+      var atuais = favoritos();
+      chaves.forEach(function (k) {
+        var estrela = linhas[k].querySelector('.estrela-menu');
+        if (estrela) estrela.textContent = atuais.indexOf(k) >= 0 ? '★' : '☆';
+      });
+      atuais.slice().reverse().forEach(function (k) { if (linhas[k]) pai.insertBefore(linhas[k], pai.firstChild.nextSibling || null); });
+    }
+    chaves.forEach(function (k) {
+      var st = document.createElement('span');
+      st.className = 'estrela-menu';
+      st.style.cssText = 'margin-left:auto;padding:0 4px;color:#ff6a3d;font-size:14px;cursor:pointer;';
+      st.textContent = '☆';
+      st.addEventListener('click', function (e) {
+        e.stopPropagation(); e.preventDefault();
+        var l = favoritos();
+        var i = l.indexOf(k);
+        if (i >= 0) l.splice(i, 1); else l.push(k);
+        salvar(l);
+        ordenar();
+      }, true);
+      linhas[k].appendChild(st);
+    });
+    campo.addEventListener('input', function () {
+      var q = campo.value.trim().toLowerCase();
+      chaves.forEach(function (k) { linhas[k].style.display = (!q || k.toLowerCase().indexOf(q) >= 0) ? '' : 'none'; });
+    });
+    ordenar();
+    return true;
+  }
+  var tentativas = 0;
+  var timer = setInterval(function () {
+    tentativas++;
+    if (montar() || tentativas > 60) clearInterval(timer);
+  }, 500);
+})();
+</script>
+
+</body>
 </html>
