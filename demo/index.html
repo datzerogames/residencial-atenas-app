@@ -191,7 +191,7 @@
       var p = el.parentElement;
       while (p) {
         var s = getComputedStyle(p);
-        if (s.overflowY === 'auto' || s.overflowY === 'scroll') { p.style.paddingBottom = '130px'; break; }
+        if (s.overflowY === 'auto' || s.overflowY === 'scroll') { break; }
         p = p.parentElement;
       }
       el.dataset.espacoOk = '1';
