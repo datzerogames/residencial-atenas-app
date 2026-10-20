@@ -96,10 +96,20 @@
       };
       leitor.readAsDataURL(f);
     };
+    btn._input = input;
     alvo.appendChild(btn);
     alvo.appendChild(input);
   }
-  function atualizar() { aplicarAvatares(); injetarBotaoFoto(); }
+  function limparBotaoFoto() {
+    var b = document.getElementById('btn-trocar-foto');
+    if (!b) return;
+    var pai = b.parentElement;
+    if (location.pathname.indexOf('/perfil') < 0 || !pai || !document.body.contains(pai) || (pai.textContent || '').indexOf('@') < 0) {
+      if (b._input) b._input.remove();
+      b.remove();
+    }
+  }
+  function atualizar() { limparBotaoFoto(); aplicarAvatares(); injetarBotaoFoto(); }
   setInterval(atualizar, 1000);
 })();
 </script><script>
