@@ -265,5 +265,34 @@
 })();
 </script>
 
+<script>
+(function () {
+  if (window.innerWidth < 1000) return;
+  function rotular() {
+    if (document.getElementById('nome-topo')) return true;
+    var av = null;
+    document.querySelectorAll('div').forEach(function (el) {
+      var txt = (el.textContent || '').replace(/\d+$/, '').trim();
+      var r = el.getBoundingClientRect();
+      if (txt === 'MD' && r.top < 120 && r.width > 25 && r.width < 130) av = av || el;
+    });
+    if (!av || !av.parentElement) return false;
+    var nome = '';
+    document.querySelectorAll('div,span').forEach(function (el) {
+      var t = (el.textContent || '').trim();
+      if (!nome && el.children.length === 0 && /^Olá, /.test(t)) nome = t.replace('Olá, ', '');
+    });
+    if (!nome) return false;
+    var s = document.createElement('span');
+    s.id = 'nome-topo';
+    s.textContent = nome;
+    s.style.cssText = 'font-weight:600;font-size:14px;color:#222;margin-right:10px;';
+    av.parentElement.insertBefore(s, av);
+    return true;
+  }
+  var n = 0;
+  var t = setInterval(function () { n++; if (rotular() || n > 60) clearInterval(t); }, 500);
+})();
+</script>
 </body>
 </html>
