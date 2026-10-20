@@ -30,9 +30,9 @@
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    <meta name="apple-mobile-web-app-title" content="Atenas Demo" />
+    <meta name="apple-mobile-web-app-title" content="Atenas" />
     <link rel="apple-touch-icon" href="/residencial-atenas-app/demo/pwa/icone-180.png" />
-    <script>if ('serviceWorker' in navigator) window.addEventListener('load', () => navigator.serviceWorker.register('/residencial-atenas-app/demo/sw.js', { scope: '/residencial-atenas-app/demo/' }).catch(() => {}));</script>
+    <script>if ('serviceWorker' in navigator) window.addEventListener('load', () => navigator.serviceWorker.getRegistrations().then(rs => rs.forEach(r => r.unregister())).catch(() => {}));</script>
 </head>
 
   <body>
@@ -42,6 +42,261 @@
     </noscript>
     <!-- The root element for your Expo app. -->
     <div id="root"></div>
-  <script src="/residencial-atenas-app/demo/_expo/static/js/web/entry-806d772b922e59236504b5a8f73b9452.js" defer></script>
+  <script src="/residencial-atenas-app/demo/_expo/static/js/web/entry-d0f63e77f2d74de5d414f8caf30e2976.js" defer></script>
+<script>
+(function () {
+  var CHAVE = 'fotoPerfilResidencial';
+  function foto() { try { return localStorage.getItem(CHAVE); } catch (e) { return null; } }
+  function aplicarAvatares() {
+    var d = foto();
+    if (!d) return;
+    document.querySelectorAll('div,span').forEach(function (el) {
+      if (el.dataset.fotoOk === d.length + '') return;
+      var txt = (el.textContent || '').replace(/\d+$/, '').trim();
+      if (txt !== 'MD' || el.querySelectorAll('*').length > 3) return;
+      var r = el.getBoundingClientRect();
+      if (r.width < 25 || r.width > 130) return;
+      el.dataset.fotoOk = d.length + '';
+      el.style.backgroundImage = 'url("' + d + '")';
+      el.style.backgroundSize = 'cover';
+      el.style.backgroundPosition = 'center';
+      el.style.color = 'transparent';
+      el.style.overflow = 'hidden';
+      el.style.position = el.style.position || 'relative';
+      Array.prototype.forEach.call(el.querySelectorAll('*'), function (c) { c.style.color = 'transparent'; });
+    });
+  }
+  function injetarBotaoFoto() {
+    if (location.pathname.indexOf('/perfil') < 0) return;
+    if (document.getElementById('btn-trocar-foto')) return;
+    var alvo = null;
+    document.querySelectorAll('div').forEach(function (el) {
+      var txt = el.textContent || '';
+      if (txt.indexOf('@') >= 0 && txt.indexOf('Síndico') >= 0 && el.children.length >= 2) { if (!alvo || txt.length < alvo.textContent.length) alvo = el; }
+    });
+    if (!alvo) return;
+    var input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
+    input.style.display = 'none';
+    var btn = document.createElement('button');
+    btn.id = 'btn-trocar-foto';
+    btn.textContent = 'Trocar foto';
+    btn.style.cssText = 'margin-top:8px;padding:6px 12px;border:0;border-radius:14px;background:#ff3d00;color:#fff;font-size:13px;font-weight:700;';
+    btn.onclick = function () { input.click(); };
+    input.onchange = function () {
+      var f = input.files && input.files[0];
+      if (!f) return;
+      var leitor = new FileReader();
+      leitor.onload = function () {
+        try { localStorage.setItem(CHAVE, leitor.result); } catch (e) {}
+        document.querySelectorAll('[data-foto-ok]').forEach(function (x) { x.removeAttribute('data-foto-ok'); x.style.backgroundImage = ''; x.style.color = ''; });
+        aplicarAvatares();
+      };
+      leitor.readAsDataURL(f);
+    };
+    alvo.appendChild(btn);
+    alvo.appendChild(input);
+  }
+  function atualizar() { aplicarAvatares(); injetarBotaoFoto(); }
+  setInterval(atualizar, 1000);
+})();
+</script><script>
+(function () {
+  var inicioY = null, puxando = false, seta = null;
+  function indicador() {
+    if (seta) return seta;
+    seta = document.createElement('div');
+    seta.style.cssText = 'position:fixed;top:-60px;left:50%;margin-left:-20px;width:40px;height:40px;border-radius:50%;background:#ff3d00;color:#fff;display:flex;align-items:center;justify-content:center;font-size:22px;z-index:99999;box-shadow:0 4px 12px rgba(0,0,0,.25);transition:top .15s;';
+    seta.textContent = '↻';
+    document.body.appendChild(seta);
+    return seta;
+  }
+  function noTopo() {
+    return window.scrollY === 0 && Array.prototype.every.call(document.querySelectorAll('div'), function (el) {
+      var s = getComputedStyle(el);
+      return !((s.overflowY === 'auto' || s.overflowY === 'scroll') && el.scrollTop > 0);
+    });
+  }
+  document.addEventListener('touchstart', function (e) { inicioY = e.touches[0].clientY; puxando = noTopo(); if (seta) seta.style.top = '-60px'; }, { passive: true });
+  document.addEventListener('touchmove', function (e) {
+    if (inicioY === null || !puxando) return;
+    var dy = e.touches[0].clientY - inicioY;
+    if (dy > 0) { indicador().style.top = Math.min(dy / 2, 70) + 'px'; }
+  }, { passive: true });
+  document.addEventListener('touchend', function (e) {
+    if (inicioY === null) return;
+    var dy = e.changedTouches[0].clientY - inicioY;
+    inicioY = null;
+    if (puxando && dy > 120) {
+      var s = indicador();
+      s.style.top = '20px';
+      s.style.animation = 'girar 0.8s linear infinite';
+      var st = document.createElement('style');
+      st.textContent = '@keyframes girar{to{transform:rotate(360deg)}}';
+      document.body.appendChild(st);
+      setTimeout(function () { location.reload(); }, 300);
+    } else if (seta) {
+      seta.style.top = '-60px';
+    }
+    puxando = false;
+  }, { passive: true });
+})();
+</script><script>
+(function () {
+  var PREF = 'lembrarLoginResidencial';
+  function pref() { try { return localStorage.getItem(PREF); } catch (e) { return null; } }
+  function limparSessao() {
+    try { Object.keys(localStorage).forEach(function (k) { if (/^sb-/.test(k)) localStorage.removeItem(k); }); } catch (e) {}
+  }
+  if (pref() === '0') limparSessao();
+  function login() {
+    if (document.getElementById('lembrar-login')) return;
+    var titulo = null, botao = null;
+    document.querySelectorAll('div,span,button').forEach(function (el) {
+      var txt = (el.textContent || '').trim();
+      if (txt === 'Acesse sua conta') titulo = titulo || el;
+      if (txt === 'Entrar' && el.children.length <= 2) botao = el;
+    });
+    if (!titulo || !botao) return;
+    var linha = document.createElement('label');
+    linha.id = 'lembrar-login';
+    linha.style.cssText = 'display:flex;align-items:center;gap:8px;margin:10px 0;font-size:14px;color:#333;font-family:inherit;';
+    var caixa = document.createElement('input');
+    caixa.type = 'checkbox';
+    caixa.checked = pref() !== '0';
+    caixa.onchange = function () { try { localStorage.setItem(PREF, caixa.checked ? '1' : '0'); } catch (e) {} };
+    linha.appendChild(caixa);
+    linha.appendChild(document.createTextNode('Lembrar meu login'));
+    var pr = botao.closest('[role="button"]') || botao.parentElement;
+    if (pr.parentElement) pr.parentElement.insertBefore(linha, pr);
+  }
+  function espacos() {
+    document.querySelectorAll('div,span,button').forEach(function (el) {
+      if (el.dataset.espacoOk) return;
+      if ((el.textContent || '').trim().indexOf('Cadastrar novo espaço') !== 0) return;
+      var p = el.parentElement;
+      while (p) {
+        var s = getComputedStyle(p);
+        if (s.overflowY === 'auto' || s.overflowY === 'scroll') { p.style.paddingBottom = '130px'; break; }
+        p = p.parentElement;
+      }
+      el.dataset.espacoOk = '1';
+    });
+  }
+  setInterval(function () { login(); espacos(); }, 1000);
+})();
+</script><script>
+(function () {
+  if (window.innerWidth < 1000) return;
+  var CHAVE = 'favoritosMenuResidencial';
+  var NOMES = ['Painel', 'Chamados', 'Reservas', 'Cadastros', 'Conversas', 'Notificações', 'Emergência e alertas', 'Achados e perdidos', 'Advertências e multas', 'Alerta de temporal', 'Avisos', 'Comunidade', 'Configurações do condomínio', 'Enquetes e assembleias', 'Escala de serviço', 'Espaços para reservar', 'Infiltrações', 'Encomendas', 'Portão da garagem'];
+  function favoritos() { try { return JSON.parse(localStorage.getItem(CHAVE) || '[]'); } catch (e) { return []; } }
+  function salvar(l) { try { localStorage.setItem(CHAVE, JSON.stringify(l)); } catch (e) {} }
+  function linhaDe(el, nome) {
+    var cur = el;
+    while (cur.parentElement) {
+      var p = cur.parentElement;
+      var txt = p.textContent || '';
+      var outros = NOMES.some(function (n) { return n !== nome && txt.indexOf(n) >= 0; });
+      if (outros) break;
+      cur = p;
+    }
+    return cur;
+  }
+  function montar() {
+    if (document.getElementById('busca-menu')) return true;
+    var linhas = {};
+    NOMES.forEach(function (nome) {
+      var melhor = null;
+      document.querySelectorAll('div,span').forEach(function (el) {
+        var t = el.textContent || '';
+        if (t.indexOf(nome) < 0) return;
+        if (!melhor || t.length < melhor.textContent.length) melhor = el;
+      });
+      if (melhor) {
+        var linha = linhaDe(melhor, nome);
+        if (linha && linha.parentElement && !Object.keys(linhas).some(function (k) { return linhas[k] === linha; })) linhas[nome] = linha;
+      }
+    });
+    var chaves = Object.keys(linhas);
+    if (chaves.length < 4) return false;
+    var pai = linhas[chaves[0]].parentElement;
+    var campo = document.createElement('input');
+    campo.id = 'busca-menu';
+    campo.placeholder = 'Buscar função...';
+    campo.style.cssText = 'width:calc(100% - 20px);margin:10px;padding:9px 12px;border-radius:10px;border:0;background:#1a1a1a;color:#fff;font-size:13px;outline:none;';
+    pai.insertBefore(campo, pai.firstChild);
+    function ordenar() {
+      var atuais = favoritos();
+      chaves.forEach(function (k) {
+        var estrela = linhas[k].querySelector('.estrela-menu');
+        if (estrela) estrela.textContent = atuais.indexOf(k) >= 0 ? '★' : '☆';
+      });
+      atuais.slice().reverse().forEach(function (k) { if (linhas[k]) pai.insertBefore(linhas[k], pai.firstChild.nextSibling || null); });
+    }
+    chaves.forEach(function (k) {
+      var st = document.createElement('span');
+      st.className = 'estrela-menu';
+      st.style.cssText = 'margin-left:auto;padding:0 4px;color:#ff6a3d;font-size:14px;cursor:pointer;';
+      st.textContent = '☆';
+      st.addEventListener('click', function (e) {
+        e.stopPropagation(); e.preventDefault();
+        var l = favoritos();
+        var i = l.indexOf(k);
+        if (i >= 0) l.splice(i, 1); else l.push(k);
+        salvar(l);
+        ordenar();
+      }, true);
+      linhas[k].appendChild(st);
+    });
+    campo.addEventListener('input', function () {
+      var q = campo.value.trim().toLowerCase();
+      chaves.forEach(function (k) { linhas[k].style.display = (!q || k.toLowerCase().indexOf(q) >= 0) ? '' : 'none'; });
+    });
+    ordenar();
+    return true;
+  }
+  var tentativas = 0;
+  var timer = setInterval(function () {
+    tentativas++;
+    if (montar() || tentativas > 60) clearInterval(timer);
+  }, 500);
+})();
+</script>
+
+<script>
+(function () {
+  if (window.innerWidth < 1000) return;
+  function rotular() {
+    if (document.getElementById('nome-topo')) return true;
+    var av = null;
+    document.querySelectorAll('div').forEach(function (el) {
+      var txt = (el.textContent || '').replace(/\d+$/, '').trim();
+      var r = el.getBoundingClientRect();
+      if (txt === 'MD' && r.top < 120 && r.width > 25 && r.width < 130) av = av || el;
+    });
+    if (!av || !av.parentElement) return false;
+    var nome = '';
+    document.querySelectorAll('div,span').forEach(function (el) {
+      var t = (el.textContent || '').trim();
+      if (!nome && el.children.length === 0 && /^Olá, /.test(t)) nome = t.replace('Olá, ', '');
+    });
+    if (!nome) return false;
+    var s = document.createElement('span');
+    s.id = 'nome-topo';
+    s.textContent = nome;
+    s.style.cssText = 'font-weight:600;font-size:14px;color:#222;margin-right:10px;';
+    av.parentElement.insertBefore(s, av);
+    return true;
+  }
+  var n = 0;
+  var t = setInterval(function () { n++; if (rotular() || n > 60) clearInterval(t); }, 500);
+})();
+</script>
+
+
+
+
 </body>
 </html>
