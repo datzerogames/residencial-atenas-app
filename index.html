@@ -294,60 +294,7 @@
   var t = setInterval(function () { n++; if (rotular() || n > 60) clearInterval(t); }, 500);
 })();
 </script>
-<script>
-(function () {
-  if (window.innerWidth < 1000) return;
-  var PRINCIPAIS = ['Painel', 'Chamados', 'Reservas', 'Cadastros', 'Conversas', 'Avisos', 'Comunidade', 'Configurações do condomínio'];
-  function limpo(el) { return (el.textContent || '').replace(/[^\u00C0-\u024F\w ]/g, ' ').replace(/\s+/g, ' ').trim(); }
-  function bate(txt, nome) { return txt === nome || new RegExp('^' + nome.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ' \\d+$').test(txt); }
-  function linhaDe(nome) {
-    var melhor = null;
-    document.querySelectorAll('div,span').forEach(function (el) {
-      if (bate(limpo(el), nome) && (!melhor || el.textContent.length < melhor.textContent.length)) melhor = el;
-    });
-    if (!melhor) return null;
-    var cur = melhor;
-    while (cur.parentElement && bate(limpo(cur.parentElement), nome)) cur = cur.parentElement;
-    return cur;
-  }
-  function montar() {
-    if (document.getElementById('trilho-menu')) return true;
-    var linhas = {};
-    PRINCIPAIS.forEach(function (nome) { var l = linhaDe(nome); if (l) linhas[nome] = l; });
-    var chaves = Object.keys(linhas);
-    if (chaves.length < 3) return false;
-    var lateral = linhas[chaves[0]];
-    while (lateral.parentElement && lateral.parentElement.getBoundingClientRect().width < 600) lateral = lateral.parentElement;
-    var trilho = document.createElement('div');
-    trilho.id = 'trilho-menu';
-    trilho.style.cssText = 'position:fixed;top:0;left:0;bottom:0;width:64px;background:#0d0d0d;display:flex;flex-direction:column;align-items:center;gap:6px;padding-top:12px;z-index:1000;';
-    chaves.forEach(function (nome) {
-      var linha = linhas[nome];
-      var icone = linha.querySelector('svg') ? linha.querySelector('svg').cloneNode(true) : (linha.firstElementChild ? linha.firstElementChild.cloneNode(true) : document.createTextNode(nome.charAt(0)));
-      var b = document.createElement('div');
-      b.title = nome;
-      b.style.cssText = 'width:42px;height:42px;border-radius:12px;display:grid;place-items:center;color:#bdb8b0;cursor:pointer;';
-      b.appendChild(icone);
-      b.addEventListener('click', function () { linha.click(); });
-      trilho.appendChild(b);
-    });
-    document.body.appendChild(trilho);
-    lateral.style.marginLeft = '64px';
-    function destacar() {
-      chaves.forEach(function (nome, i) {
-        var ativo = getComputedStyle(linhas[nome]).backgroundColor === 'rgb(255, 61, 0)';
-        trilho.children[i].style.background = ativo ? '#ff3d00' : 'transparent';
-        trilho.children[i].style.color = ativo ? '#ffffff' : '#bdb8b0';
-      });
-    }
-    destacar();
-    setInterval(destacar, 800);
-    return true;
-  }
-  var tentativas = 0;
-  var timer = setInterval(function () { tentativas++; if (montar() || tentativas > 120) clearInterval(timer); }, 500);
-})();
-</script>
+
 
 
 
