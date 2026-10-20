@@ -32,7 +32,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="apple-mobile-web-app-title" content="Atenas" />
     <link rel="apple-touch-icon" href="/residencial-atenas-app/pwa/icone-180.png" />
-    <script>if ('serviceWorker' in navigator) window.addEventListener('load', () => navigator.serviceWorker.register('/residencial-atenas-app/sw.js', { scope: '/residencial-atenas-app/' }).catch(() => {}));</script>
+    <script>if ('serviceWorker' in navigator) window.addEventListener('load', () => navigator.serviceWorker.getRegistrations().then(rs => rs.forEach(r => r.unregister())).catch(() => {}));</script>
 </head>
 
   <body>
@@ -43,5 +43,148 @@
     <!-- The root element for your Expo app. -->
     <div id="root"></div>
   <script src="/residencial-atenas-app/_expo/static/js/web/entry-d0f63e77f2d74de5d414f8caf30e2976.js" defer></script>
-</body>
+<script>
+(function () {
+  var CHAVE = 'fotoPerfilResidencial';
+  function foto() { try { return localStorage.getItem(CHAVE); } catch (e) { return null; } }
+  function aplicarAvatares() {
+    var d = foto();
+    if (!d) return;
+    document.querySelectorAll('div,span').forEach(function (el) {
+      if (el.dataset.fotoOk === d.length + '') return;
+      var txt = (el.textContent || '').replace(/\d+$/, '').trim();
+      if (txt !== 'MD' || el.querySelectorAll('*').length > 3) return;
+      var r = el.getBoundingClientRect();
+      if (r.width < 25 || r.width > 130) return;
+      el.dataset.fotoOk = d.length + '';
+      el.style.backgroundImage = 'url("' + d + '")';
+      el.style.backgroundSize = 'cover';
+      el.style.backgroundPosition = 'center';
+      el.style.color = 'transparent';
+      el.style.overflow = 'hidden';
+      el.style.position = el.style.position || 'relative';
+      Array.prototype.forEach.call(el.querySelectorAll('*'), function (c) { c.style.color = 'transparent'; });
+    });
+  }
+  function injetarBotaoFoto() {
+    if (location.pathname.indexOf('/perfil') < 0) return;
+    if (document.getElementById('btn-trocar-foto')) return;
+    var alvo = null;
+    document.querySelectorAll('div').forEach(function (el) {
+      var txt = el.textContent || '';
+      if (txt.indexOf('@') >= 0 && txt.indexOf('Síndico') >= 0 && el.children.length >= 2) { if (!alvo || txt.length < alvo.textContent.length) alvo = el; }
+    });
+    if (!alvo) return;
+    var input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
+    input.style.display = 'none';
+    var btn = document.createElement('button');
+    btn.id = 'btn-trocar-foto';
+    btn.textContent = 'Trocar foto';
+    btn.style.cssText = 'margin-top:8px;padding:6px 12px;border:0;border-radius:14px;background:#ff3d00;color:#fff;font-size:13px;font-weight:700;';
+    btn.onclick = function () { input.click(); };
+    input.onchange = function () {
+      var f = input.files && input.files[0];
+      if (!f) return;
+      var leitor = new FileReader();
+      leitor.onload = function () {
+        try { localStorage.setItem(CHAVE, leitor.result); } catch (e) {}
+        document.querySelectorAll('[data-foto-ok]').forEach(function (x) { x.removeAttribute('data-foto-ok'); x.style.backgroundImage = ''; x.style.color = ''; });
+        aplicarAvatares();
+      };
+      leitor.readAsDataURL(f);
+    };
+    alvo.appendChild(btn);
+    alvo.appendChild(input);
+  }
+  function atualizar() { aplicarAvatares(); injetarBotaoFoto(); }
+  setInterval(atualizar, 1000);
+})();
+</script><script>
+(function () {
+  var inicioY = null, puxando = false, seta = null;
+  function indicador() {
+    if (seta) return seta;
+    seta = document.createElement('div');
+    seta.style.cssText = 'position:fixed;top:-60px;left:50%;margin-left:-20px;width:40px;height:40px;border-radius:50%;background:#ff3d00;color:#fff;display:flex;align-items:center;justify-content:center;font-size:22px;z-index:99999;box-shadow:0 4px 12px rgba(0,0,0,.25);transition:top .15s;';
+    seta.textContent = '↻';
+    document.body.appendChild(seta);
+    return seta;
+  }
+  function noTopo() {
+    return window.scrollY === 0 && Array.prototype.every.call(document.querySelectorAll('div'), function (el) {
+      var s = getComputedStyle(el);
+      return !((s.overflowY === 'auto' || s.overflowY === 'scroll') && el.scrollTop > 0);
+    });
+  }
+  document.addEventListener('touchstart', function (e) { inicioY = e.touches[0].clientY; puxando = noTopo(); if (seta) seta.style.top = '-60px'; }, { passive: true });
+  document.addEventListener('touchmove', function (e) {
+    if (inicioY === null || !puxando) return;
+    var dy = e.touches[0].clientY - inicioY;
+    if (dy > 0) { indicador().style.top = Math.min(dy / 2, 70) + 'px'; }
+  }, { passive: true });
+  document.addEventListener('touchend', function (e) {
+    if (inicioY === null) return;
+    var dy = e.changedTouches[0].clientY - inicioY;
+    inicioY = null;
+    if (puxando && dy > 120) {
+      var s = indicador();
+      s.style.top = '20px';
+      s.style.animation = 'girar 0.8s linear infinite';
+      var st = document.createElement('style');
+      st.textContent = '@keyframes girar{to{transform:rotate(360deg)}}';
+      document.body.appendChild(st);
+      setTimeout(function () { location.reload(); }, 300);
+    } else if (seta) {
+      seta.style.top = '-60px';
+    }
+    puxando = false;
+  }, { passive: true });
+})();
+</script><script>
+(function () {
+  var PREF = 'lembrarLoginResidencial';
+  function pref() { try { return localStorage.getItem(PREF); } catch (e) { return null; } }
+  function limparSessao() {
+    try { Object.keys(localStorage).forEach(function (k) { if (/^sb-/.test(k)) localStorage.removeItem(k); }); } catch (e) {}
+  }
+  if (pref() === '0') limparSessao();
+  function login() {
+    if (document.getElementById('lembrar-login')) return;
+    var titulo = null, botao = null;
+    document.querySelectorAll('div,span,button').forEach(function (el) {
+      var txt = (el.textContent || '').trim();
+      if (txt === 'Acesse sua conta') titulo = titulo || el;
+      if (txt === 'Entrar' && el.children.length <= 2) botao = el;
+    });
+    if (!titulo || !botao) return;
+    var linha = document.createElement('label');
+    linha.id = 'lembrar-login';
+    linha.style.cssText = 'display:flex;align-items:center;gap:8px;margin:10px 0;font-size:14px;color:#333;font-family:inherit;';
+    var caixa = document.createElement('input');
+    caixa.type = 'checkbox';
+    caixa.checked = pref() !== '0';
+    caixa.onchange = function () { try { localStorage.setItem(PREF, caixa.checked ? '1' : '0'); } catch (e) {} };
+    linha.appendChild(caixa);
+    linha.appendChild(document.createTextNode('Lembrar meu login'));
+    var pr = botao.closest('[role="button"]') || botao.parentElement;
+    if (pr.parentElement) pr.parentElement.insertBefore(linha, pr);
+  }
+  function espacos() {
+    document.querySelectorAll('div,span,button').forEach(function (el) {
+      if (el.dataset.espacoOk) return;
+      if ((el.textContent || '').trim().indexOf('Cadastrar novo espaço') !== 0) return;
+      var p = el.parentElement;
+      while (p) {
+        var s = getComputedStyle(p);
+        if (s.overflowY === 'auto' || s.overflowY === 'scroll') { p.style.paddingBottom = '130px'; break; }
+        p = p.parentElement;
+      }
+      el.dataset.espacoOk = '1';
+    });
+  }
+  setInterval(function () { login(); espacos(); }, 1000);
+})();
+</script></body>
 </html>
