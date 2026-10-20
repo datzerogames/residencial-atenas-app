@@ -136,7 +136,9 @@
       var st = document.createElement('style');
       st.textContent = '@keyframes girar{to{transform:rotate(360deg)}}';
       document.body.appendChild(st);
-      setTimeout(function () { location.reload(); }, 300);
+      var inicio = Date.now();
+      var fim = function () { setTimeout(function () { s.style.animation = ''; s.style.top = '-60px'; }, Math.max(0, 700 - (Date.now() - inicio))); };
+      try { Promise.resolve(window.__atualizarDados ? window.__atualizarDados() : null).then(fim, fim); } catch (e) { fim(); }
     } else if (seta) {
       seta.style.top = '-60px';
     }
