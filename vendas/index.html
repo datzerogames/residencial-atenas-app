@@ -260,6 +260,276 @@
   .garantia-final { display: flex; align-items: center; justify-content: center; gap: 8px; margin: 22px 0 0; font-size: 15px; color: #fff1e8; }
   .garantia-final .ms { font-size: 19px; }
   .garantia-final a { color: #fff; font-weight: 800; text-decoration: underline; }
+  /* Carrossel em tabela no topo: funções x perfis */
+  .matriz { background: var(--branco); border-radius: 22px; box-shadow: var(--sombra-2); border: 1px solid var(--borda); overflow: hidden; }
+  .matriz-topo { display: flex; justify-content: space-between; align-items: center; padding: 16px 20px; border-bottom: 1px solid var(--borda); }
+  .matriz-tema { display: inline-flex; align-items: center; gap: 8px; background: var(--verde-fundo); color: var(--verde-escuro); padding: 7px 14px; border-radius: 999px; font-size: 15px; }
+  .matriz-tema .ms { font-size: 20px; }
+  .matriz-pontos { display: flex; gap: 6px; }
+  .matriz-pontos button { width: 9px; height: 9px; padding: 0; border-radius: 999px; border: 0; background: #d6cfc5; cursor: pointer; transition: width .25s, background .25s; }
+  .matriz-pontos button.on { width: 26px; background: var(--verde); }
+  .matriz-cab, .matriz-linha { display: grid; grid-template-columns: 1fr repeat(4, 74px); align-items: stretch; }
+  .matriz-cab span { padding: 12px 6px; font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--apagado); text-align: center; background: var(--fundo-2); }
+  .matriz-cab span:first-child { text-align: left; padding-left: 20px; }
+  .matriz-linhas { min-height: 386px; transition: opacity .35s, transform .35s; }
+  .matriz-linhas.saindo { opacity: 0; transform: translateX(-14px); }
+  .matriz-linha { border-bottom: 1px solid var(--borda); }
+  .matriz-linha:last-child { border-bottom: 0; }
+  .matriz-linha .f { padding: 14px 10px 14px 20px; }
+  .matriz-linha .f b { display: block; font-size: 15px; }
+  .matriz-linha .f i { display: block; font-size: 13px; color: var(--apagado); margin-top: 2px; line-height: 1.4; }
+  .matriz-linha .c { display: grid; place-items: center; }
+  .matriz-linha .c.sim { background: #fff7f2; }
+  .matriz-linha .c.nao { background: #fbf3f1; }
+  .matriz-linha .c .ms { width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; font-size: 18px; color: #fff; }
+  .matriz-linha .c.sim .ms { background: var(--verde); box-shadow: 0 4px 10px rgba(255, 64, 0, .3); }
+  .matriz-linha .c.nao .ms { background: #e8b4ab; }
+  @media (max-width: 560px) {
+    .matriz-cab, .matriz-linha { grid-template-columns: 1fr repeat(4, 46px); }
+    .matriz-cab span { font-size: 9px; letter-spacing: 0; padding: 10px 2px; }
+    .matriz-linha .c .ms { width: 24px; height: 24px; font-size: 15px; }
+    .matriz-linha .f i { display: none; }
+    .matriz-linhas { min-height: 0; }
+  }
+  /* Funções em cartões por assunto (estilo planos), girando em carrossel */
+  .cab-carrossel { display: flex; justify-content: space-between; align-items: flex-end; gap: 20px; }
+  .setas { display: flex; gap: 10px; }
+  .seta { width: 46px; height: 46px; border-radius: 50%; border: 1px solid var(--borda); background: var(--branco); box-shadow: var(--sombra-1); cursor: pointer; display: grid; place-items: center; color: var(--texto); }
+  .seta:hover { background: var(--verde); color: #fff; }
+  .fc-trilho { display: flex; gap: 20px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-behavior: smooth; padding: 18px 4px 24px; scrollbar-width: none; }
+  .fc-trilho::-webkit-scrollbar { display: none; }
+  .fc { position: relative; flex: 0 0 calc((100% - 60px) / 4); min-width: 260px; scroll-snap-align: start; background: var(--branco); border: 1px solid var(--borda); border-radius: 20px; box-shadow: var(--sombra-1); padding: 24px 22px; display: flex; flex-direction: column; }
+  .fc header { text-align: center; padding-bottom: 18px; border-bottom: 1px solid var(--borda); }
+  .fc-ic { width: 52px; height: 52px; border-radius: 14px; background: #0d0d0d; color: #ff9a62; display: inline-grid; place-items: center; margin-bottom: 12px; }
+  .fc-ic .ms { font-size: 26px; }
+  .fc h3 { font-size: 19px; }
+  .fc header p { margin: 6px 0 0; color: var(--apagado); font-size: 14px; }
+  .fc-sep { font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--apagado); text-align: center; margin: 16px 0 6px; }
+  .fc ul { list-style: none; margin: 0; padding: 0; }
+  .fc li { display: flex; gap: 12px; align-items: flex-start; padding: 11px 0; border-bottom: 1px dashed var(--borda); }
+  .fc li:last-child { border-bottom: 0; }
+  .fc li > .ms { font-size: 21px; color: var(--verde); margin-top: 1px; }
+  .fc li b { display: block; font-size: 14.5px; }
+  .fc li i { display: block; font-style: normal; font-size: 13px; color: var(--apagado); }
+  .fc.destaque-fc { background: #0d0d0d; color: #fff; border-color: #0d0d0d; box-shadow: 0 20px 30px -10px rgba(13, 13, 13, .35); }
+  .fc.destaque-fc header { border-color: #2b211b; }
+  .fc.destaque-fc header p, .fc.destaque-fc li i, .fc.destaque-fc .fc-sep { color: #bdb8b0; }
+  .fc.destaque-fc .fc-ic { background: var(--verde); color: #fff; }
+  .fc.destaque-fc li { border-color: #2b211b; }
+  .fc.destaque-fc li > .ms { color: #ff9a62; }
+  .fc-selo { position: absolute; top: -13px; left: 50%; transform: translateX(-50%); background: var(--verde); color: #fff; font-size: 12px; font-weight: 800; padding: 5px 14px; border-radius: 999px; white-space: nowrap; }
+  .fc-pontos { display: flex; justify-content: center; gap: 7px; margin-top: 6px; }
+  .fc-pontos button { width: 9px; height: 9px; padding: 0; border-radius: 999px; border: 0; background: #d6cfc5; cursor: pointer; transition: width .25s, background .25s; }
+  .fc-pontos button.on { width: 26px; background: var(--verde); }
+  @media (max-width: 960px) { .fc { flex-basis: calc((100% - 20px) / 2); } }
+  @media (max-width: 560px) { .fc { flex-basis: 86%; } .setas { display: none; } .cab-carrossel { display: block; } }
+
+  /* Setas de cada lado dos carrosséis */
+  .seta { width: 46px; height: 46px; border-radius: 50%; border: 1px solid var(--borda); background: var(--branco); box-shadow: var(--sombra-2); cursor: pointer; display: grid; place-items: center; color: var(--texto); transition: background .15s, color .15s; }
+  .seta:hover { background: var(--verde); color: #fff; }
+  .seta.lado { position: absolute; top: 50%; transform: translateY(-50%); z-index: 5; }
+  .fc-hero, .mz-moldura { position: relative; min-width: 0; }
+  .fc-hero .fc-trilho { min-width: 0; }
+  .mz-moldura .matriz-linhas { min-height: 290px; }
+  .fc-hero .seta.esq { left: -23px; } .fc-hero .seta.dir { right: -23px; }
+  .fc-hero .seta.lado { top: calc(50% - 16px); }
+
+  .fc-hero { max-width: 340px; width: 100%; justify-self: center; }
+  .fc-hero .fc { flex: 0 0 100%; min-width: 0; padding: 28px 20px 16px; background: #0d0d0d; color: #fff; border-color: #0d0d0d; box-shadow: 0 20px 30px -10px rgba(13, 13, 13, .35); }
+  .fc-hero .fc header { padding-bottom: 12px; border-color: #2b211b; }
+  .fc-hero .fc-ic { width: 42px; height: 42px; margin-bottom: 8px; background: var(--verde); color: #fff; }
+  .fc-hero .fc-ic .ms { font-size: 22px; }
+  .fc-hero .fc h3 { font-size: 17px; }
+  .fc-hero .fc header p { font-size: 13px; margin-top: 4px; }
+  .fc-hero .fc header p, .fc-hero .fc li i, .fc-hero .fc .fc-sep { color: #bdb8b0; }
+  .fc-hero .fc .fc-sep { margin: 10px 0 2px; font-size: 10px; }
+  .fc-hero .fc li { padding: 9px 0; gap: 10px; border-color: #2b211b; }
+  .fc-hero .fc li > .ms { font-size: 19px; color: #ff9a62; }
+  .fc-hero .fc li b { font-size: 13.5px; }
+  .fc-hero .fc li i { font-size: 12px; }
+  .hero { padding-top: 44px; padding-bottom: 52px; }
+  .fc-hero .fc-trilho { display: block; overflow: hidden; padding: 16px 0 14px; }
+  .fc-faixa { display: flex; align-items: flex-start; transition: transform .5s ease; }
+  .mz-moldura { max-width: 860px; margin: 0 auto; }
+  .mz-moldura .seta.esq { left: -64px; } .mz-moldura .seta.dir { right: -64px; }
+  @media (max-width: 1000px) { .mz-moldura .seta.esq { left: -14px; } .mz-moldura .seta.dir { right: -14px; } }
+  @media (max-width: 560px) { .fc-hero .seta.esq { left: -10px; } .fc-hero .seta.dir { right: -10px; } }
+  /* Caixa dos perfis em preto */
+  .papel { background: #0d0d0d; color: #fff; box-shadow: 0 20px 30px -10px rgba(13, 13, 13, .35); }
+  .papel h3 { color: #fff; }
+  .papel p { color: #d9d4cc; }
+  .papel .linha .ms { background: var(--verde); color: #fff; }
+  .papel .dois div { background: #1c1815; }
+  .papel .dois b { color: #ff9a62; }
+  .papel .dois span { color: #bdb8b0; }
+
+  /* Planos em carrossel */
+  .planos { background: var(--fundo-2); }
+  .pl-moldura { position: relative; min-width: 0; }
+  .pl-moldura .seta.esq { left: -23px; } .pl-moldura .seta.dir { right: -23px; }
+  .pl-trilho { display: flex; gap: 20px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-behavior: smooth; padding: 18px 0 10px; scrollbar-width: none; }
+  .pl-trilho::-webkit-scrollbar { display: none; }
+  .pl { position: relative; flex: 0 0 calc((100% - 40px) / 3); scroll-snap-align: start; background: var(--branco); border: 1px solid var(--borda); border-radius: 20px; box-shadow: var(--sombra-1); padding: 28px 24px 24px; display: flex; flex-direction: column; text-align: center; }
+  .pl h3 { font-size: 20px; display: flex; justify-content: center; align-items: center; gap: 8px; }
+  .pl h3 .ms { color: var(--verde); }
+  .pl-para { color: var(--apagado); font-size: 14px; margin: 6px 0 16px; padding-bottom: 16px; border-bottom: 1px solid var(--borda); }
+  .pl-preco { display: flex; justify-content: center; align-items: baseline; gap: 6px; flex-wrap: wrap; }
+  .pl-de { color: var(--vermelho); text-decoration: line-through; font-size: 14px; }
+  .pl-preco b { font-size: 34px; font-weight: 800; letter-spacing: -.02em; }
+  .pl-preco small { color: var(--apagado); }
+  .pl-economia { align-self: center; margin-top: 8px; background: #ecfdf5; color: #047857; font-weight: 700; font-size: 13px; padding: 5px 12px; border-radius: 999px; }
+  .pl-sep { font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--apagado); margin: 20px 0 8px; }
+  .pl ul { list-style: none; padding: 0; margin: 0 0 22px; text-align: left; }
+  .pl li { display: flex; gap: 10px; align-items: center; padding: 9px 0; border-bottom: 1px dashed var(--borda); font-size: 14.5px; }
+  .pl li .ms { color: var(--verde); font-size: 20px; }
+  .pl .botao { margin-top: auto; }
+  .pl.pl-destaque { background: #0d0d0d; color: #fff; border-color: #0d0d0d; box-shadow: 0 20px 30px -10px rgba(13, 13, 13, .35); }
+  .pl.pl-destaque .pl-para, .pl.pl-destaque .pl-preco small, .pl.pl-destaque .pl-sep { color: #bdb8b0; }
+  .pl.pl-destaque .pl-para, .pl.pl-destaque li { border-color: #2b211b; }
+  .pl.pl-destaque li .ms, .pl.pl-destaque h3 .ms { color: #ff9a62; }
+  .pl.pl-destaque .pl-de { color: #f7a072; }
+  @media (max-width: 960px) { .pl { flex-basis: calc((100% - 20px) / 2); } }
+  @media (max-width: 560px) { .pl { flex-basis: 88%; } .pl-moldura .seta { display: none; } }
+  /* Planos mais estreitos e um pouco mais baixos: 4 por vez */
+  .pl { flex-basis: calc((100% - 60px) / 4); padding: 24px 18px 20px; }
+  .pl h3 { font-size: 18px; }
+  .pl-para { margin: 4px 0 12px; padding-bottom: 12px; font-size: 13px; }
+  .pl-preco { flex-direction: column; align-items: center; gap: 0; }
+  .pl-preco b { font-size: 28px; }
+  .pl-de { font-size: 13px; }
+  .pl-sep { margin: 14px 0 4px; }
+  .pl li { padding: 6px 0; font-size: 13px; align-items: flex-start; }
+  .pl li .ms { font-size: 18px; }
+  .pl ul { margin-bottom: 16px; }
+  .pl .botao { padding: 12px 14px; font-size: 14px; }
+  @media (max-width: 960px) { .pl { flex-basis: calc((100% - 20px) / 2); } }
+  @media (max-width: 560px) { .pl { flex-basis: 88%; } }
+  /* Preço em faixa (de/até) */
+  .pl-rotulo { font-size: 13px; color: var(--apagado); margin-bottom: 2px; }
+  .pl.pl-destaque .pl-rotulo { color: #bdb8b0; }
+  .pl-preco { flex-direction: column; align-items: center; line-height: 1.15; }
+  .pl-preco b { font-size: 26px; color: var(--verde); }
+  .pl.pl-destaque .pl-preco b { color: #ff9a62; }
+  .pl-preco small { font-size: 13px; margin: 2px 0; }
+
+  /* Perfis: caixa preta e celular centralizados juntos */
+  .perfis .miolo { grid-template-columns: minmax(0, 420px) 300px; justify-content: center; gap: 60px; }
+  .perfis .cel-papel { width: 300px; }
+  @media (max-width: 960px) { .perfis .miolo { grid-template-columns: 1fr; } }
+  /* Planos mais baixos: preço numa linha e itens curtos */
+  .pl { padding: 20px 16px 16px; }
+  .pl-para { margin: 2px 0 10px; padding-bottom: 10px; }
+  .pl-preco { flex-direction: row; justify-content: center; align-items: baseline; gap: 5px; flex-wrap: nowrap; }
+  .pl-preco b { font-size: 19px; white-space: nowrap; }
+  .pl-preco small { margin: 0; }
+  .pl-sep { margin: 12px 0 2px; }
+  .pl li { padding: 5px 0; font-size: 13px; align-items: center; }
+  .pl ul { margin-bottom: 14px; }
+  /* Cartões do topo: um por vez, dentro da coluna, todos com a mesma altura */
+  .fc-hero { max-width: 340px; width: 100%; justify-self: center; overflow: hidden; }
+  .fc-hero .fc-trilho { display: block; overflow: hidden; padding: 16px 0 14px; }
+  .fc-hero .fc-faixa { display: flex; align-items: stretch; transition: transform .5s ease; }
+  .fc-hero .fc { flex: 0 0 100%; min-width: 0; height: auto; }
+  .fc-hero .fc li { padding: 9px 0; }
+  /* Setas do topo fora do cartão, uma de cada lado */
+  .fc-hero { max-width: 390px; overflow: visible; padding: 0 44px; }
+  .fc-hero .fc-trilho { overflow: hidden; border-radius: 20px; }
+  .fc-hero .seta.esq { left: 0; }
+  .fc-hero .seta.dir { right: 0; }
+  .fc-hero .seta.lado { top: 50%; transform: translateY(-50%); z-index: 6; }
+  @media (max-width: 560px) { .fc-hero { padding: 0 36px; } }
+  /* Tabela de comparação retangular */
+  .tabela { border-radius: 0 !important; box-shadow: none !important; }
+  /* Comparação em cartões: 4 por linha, mesmo tamanho dos planos */
+  .cmp-grade { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-top: 40px; }
+  .cmp { background: var(--branco); border: 1px solid var(--borda); border-radius: 20px; box-shadow: var(--sombra-1); padding: 22px 18px; display: flex; flex-direction: column; gap: 12px; }
+  .cmp h3 { font-size: 18px; text-align: center; padding-bottom: 10px; border-bottom: 1px solid var(--borda); }
+  .cmp-antes, .cmp-depois { display: flex; gap: 10px; align-items: flex-start; border-radius: 12px; padding: 12px; }
+  .cmp-antes { background: var(--fundo-2); }
+  .cmp-depois { background: #fff7f2; }
+  .cmp-antes .ms { color: #9ca3af; font-size: 20px; }
+  .cmp-depois .ms { color: var(--verde); font-size: 20px; }
+  .cmp-antes b, .cmp-depois b { display: block; font-size: 13px; }
+  .cmp-antes i, .cmp-depois i { display: block; font-style: normal; font-size: 13px; color: var(--apagado); }
+  @media (max-width: 960px) { .cmp-grade { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 560px) { .cmp-grade { grid-template-columns: 1fr; } }
+  /* Comparação: duas colunas de cartão, 320 px cada. Esquerda clara, direita preta */
+  .cmp-duplo { display: grid; grid-template-columns: repeat(2, 320px); justify-content: center; gap: 24px; margin-top: 40px; }
+  .cmp-col { border-radius: 20px; padding: 24px 22px 18px; }
+  .cmp-antes-col { background: var(--branco); border: 1px solid var(--borda); box-shadow: var(--sombra-1); color: var(--texto); }
+  .cmp-depois-col { background: #0d0d0d; color: #fff; box-shadow: 0 20px 30px -10px rgba(13, 13, 13, .35); }
+  .cmp-col header { text-align: center; padding-bottom: 14px; }
+  .cmp-antes-col header { border-bottom: 1px solid var(--borda); }
+  .cmp-depois-col header { border-bottom: 1px solid #2b211b; }
+  .cmp-ic { width: 46px; height: 46px; border-radius: 14px; display: inline-grid; place-items: center; margin-bottom: 10px; }
+  .cmp-ic .ms { font-size: 24px; }
+  .cmp-antes-col .cmp-ic { background: var(--fundo-2); color: #9ca3af; }
+  .cmp-depois-col .cmp-ic { background: var(--verde); color: #fff; }
+  .cmp-col h3 { font-size: 18px; }
+  .cmp-col ul { list-style: none; margin: 0; padding: 0; }
+  .cmp-col li { display: flex; gap: 12px; align-items: flex-start; padding: 10px 0; }
+  .cmp-antes-col li { border-bottom: 1px solid var(--borda); }
+  .cmp-depois-col li { border-bottom: 1px solid #2b211b; }
+  .cmp-col li:last-child { border-bottom: 0; }
+  .cmp-col li > .ms { font-size: 20px; margin-top: 1px; }
+  .cmp-antes-col li > .ms { color: #9ca3af; }
+  .cmp-depois-col li > .ms { color: #ff9a62; }
+  .cmp-col li b { display: block; font-size: 14px; }
+  .cmp-col li i { display: block; font-style: normal; font-size: 13px; color: var(--apagado); }
+  .cmp-depois-col li i { color: #bdb8b0; }
+  @media (max-width: 760px) { .cmp-duplo { grid-template-columns: 1fr; } }
+  /* Perfis: caixa e celular alinhados no centro da página, mesma altura */
+  .perfis .miolo { display: grid; grid-template-columns: 420px 300px; justify-content: center; align-items: center; gap: 60px; }
+  .perfis .cel-papel { display: flex; flex-direction: column; align-items: center; justify-content: center; height: auto; width: 300px; }
+  .perfis .cel-papel .cel { position: relative; left: auto; margin-left: 0; top: auto; }
+  .perfis .cel-papel .dica-vivo { position: static; transform: none; margin-top: 14px; }
+  @media (max-width: 960px) { .perfis .miolo { grid-template-columns: 1fr; } .perfis .cel-papel { display: none; } }
+  /* Celular de demonstração um pouco mais para baixo */
+  .perfis .cel-papel { padding-top: 320px; }
+  /* Barra de cima preta, como no app */
+  .topo { background: #0d0d0d; box-shadow: 0 1px 12px rgba(0, 0, 0, .25); }
+  .topo .marca b { color: #fff; }
+  .topo .marca small { color: #ff9a62; }
+  .topo .marca small::before { background: #ff9a62; }
+  .topo .marca .logo { background: var(--verde); color: #fff; }
+  .topo nav { color: #d9d4cc; }
+  .topo nav a:hover { color: #ff9a62; }
+  /* Quadrados dos 6 diferenciais menores */
+  .grade-6 .quadro { width: 32px; height: 32px; border-radius: 8px; margin-bottom: 12px; }
+  .grade-6 .quadro .ms { font-size: 17px; }
+  /* Seção de perfis: título e texto no tamanho da página, coluna mais larga */
+  .perfis .miolo { grid-template-columns: 480px 300px; }
+  .perfis h2 { font-size: 32px; }
+  .perfis .sub { font-size: 16px; }
+  /* Celular de demonstração subiu */
+  .perfis .cel-papel { padding-top: 240px; }
+  /* Comparação mais baixa */
+  .cmp-col { padding: 16px 20px 8px; }
+  .cmp-col header { padding-bottom: 10px; }
+  .cmp-ic { width: 36px; height: 36px; border-radius: 10px; margin-bottom: 6px; }
+  .cmp-ic .ms { font-size: 19px; }
+  .cmp-col h3 { font-size: 16px; }
+  .cmp-col li { padding: 6px 0; gap: 10px; }
+  .cmp-col li > .ms { font-size: 18px; }
+  .cmp-col li b { font-size: 13px; }
+  .cmp-col li i { font-size: 12px; line-height: 1.3; }
+  /* Letras da comparação equilibradas: título, item e descrição em degraus parecidos */
+  .cmp-col h3 { font-size: 17px; }
+  .cmp-col li b { font-size: 14px; }
+  .cmp-col li i { font-size: 13px; }
+  /* Foto do app acima da comparação */
+  .cmp-foto { display: block; width: 100%; max-width: 680px; margin: 40px auto 0; border-radius: 20px; box-shadow: var(--sombra-2); }
+  /* Cabeçalho da comparação proporcional aos cartões, centralizado */
+  #comparacao .cabeca-secao { text-align: center; }
+  #comparacao h2 { font-size: 30px; }
+  #comparacao .sub { font-size: 16px; margin-left: auto; margin-right: auto; }
+  /* Imagem de destaque centralizada na coluna, alinhada ao texto */
+  .plataformas .miolo { align-items: center; }
+  .plataformas .destaque { justify-self: center; align-self: center; width: 100%; max-width: 520px; }
+  /* Imagem de destaque um pouco mais para baixo */
+  .plataformas .destaque { margin-top: 120px; }
+  /* Quadradinhos de ícone redondos (círculos) */
+  .fc-ic, .cmp-ic, .quadro, .papel .linha .ms, .lista-plat .quadro, .plataformas .quadro, .o1 .c .q i { border-radius: 50% !important; }
 </style>
 </head>
 <body>
@@ -273,6 +543,7 @@
     <nav>
       <a href="#diferenciais">Diferenciais</a>
       <a href="#perfis">Para quem</a>
+      <a href="#planos">Planos</a>
       <a href="#comparacao">Comparação</a>
       <a href="#perguntas">Perguntas</a>
     </nav>
@@ -297,11 +568,115 @@
       </div>
       <div class="garantia"><span class="ms">verified</span>Teste grátis, sem cadastro e sem cartão</div>
     </div>
-    <div class="vitrine">
-      <div class="cel a"><img src="img/tela-1-inicio.png" alt="Tela inicial do morador no app"></div>
-      <div class="cel b"><img src="img/tela-2-encomendas.png" alt="Tela de encomendas com PIN de retirada"></div>
-      <div class="flutua f1"><span class="ic" style="background: var(--verde-fundo); color: var(--verde-escuro)"><span class="ms">package_2</span></span><div><b>Encomenda chegou</b>Retire com o PIN 8492</div></div>
-      <div class="flutua f2"><span class="ic" style="background: var(--ambar-fundo); color: #92400e"><span class="ms">event_available</span></span><div><b>Salão reservado</b>Sábado · pago com PIX</div></div>
+    <div class="fc-hero">
+      <button class="seta lado esq" id="fc-ant" aria-label="Anterior"><span class="ms">chevron_left</span></button>
+      <div class="fc-trilho" id="fc-trilho"><div class="fc-faixa" id="fc-faixa">
+<article class="fc destaque-fc">
+        <span class="fc-selo">Diferenciais</span>
+        <header><span class="fc-ic"><span class="ms">workspace_premium</span></span><h3>Diferenciais do Atenas</h3><p>O que faz o morador gostar de usar.</p></header>
+        <div class="fc-sep">O que tem</div>
+        <ul>
+          <li><span class="ms">record_voice_over</span><div><b>Modo simplificado e voz</b><i>Leitura em voz alta para quem enxerga pouco.</i></div></li>
+          <li><span class="ms">pin</span><div><b>PIN único de encomendas</b><i>Um código só para retirar tudo.</i></div></li>
+          <li><span class="ms">visibility_off</span><div><b>Ocorrência anônima</b><i>Denúncia sem expor o vizinho.</i></div></li>
+          <li><span class="ms">rate_review</span><div><b>Contestação de multa</b><i>O morador se defende pelo app.</i></div></li>
+          <li><span class="ms">play_circle</span><div><b>Demonstração ao vivo</b><i>Teste grátis antes de contratar.</i></div></li>
+        </ul>
+      </article>
+
+      <article class="fc">
+        <header><span class="fc-ic"><span class="ms">package_2</span></span><h3>Encomendas e portaria</h3><p>Nada se perde entre o caminhão e a porta do apartamento.</p></header>
+        <div class="fc-sep">O que tem</div>
+        <ul>
+          <li><span class="ms">notifications_active</span><div><b>Aviso na hora</b><i>O morador sabe que chegou.</i></div></li>
+          <li><span class="ms">photo_camera</span><div><b>Registro com fotos</b><i>Transportadora, tipo e local.</i></div></li>
+          <li><span class="ms">pin</span><div><b>Retirada com PIN ou QR Code</b><i>Ou assinatura na tela.</i></div></li>
+          <li><span class="ms">family_restroom</span><div><b>Familiar autorizado</b><i>Outra pessoa pode retirar.</i></div></li>
+          <li><span class="ms">qr_code_scanner</span><div><b>Visitantes por QR Code</b><i>A portaria lê na entrada.</i></div></li>
+        </ul>
+      </article>
+
+      <article class="fc">
+        <header><span class="fc-ic"><span class="ms">event_available</span></span><h3>Reservas</h3><p>Salão, churrasqueira e quadra sem conflito e sem papel.</p></header>
+        <div class="fc-sep">O que tem</div>
+        <ul>
+          <li><span class="ms">calendar_month</span><div><b>Calendário do mês</b><i>Dois moradores nunca no mesmo horário.</i></div></li>
+          <li><span class="ms">payments</span><div><b>Pagamento por PIX</b><i>Taxa de limpeza na própria reserva.</i></div></li>
+          <li><span class="ms">photo_library</span><div><b>Espaços com fotos e regras</b><i>Capacidade, períodos e valores.</i></div></li>
+          <li><span class="ms">task_alt</span><div><b>Aprovação do síndico</b><i>Ou automática, e bloqueio de datas.</i></div></li>
+          <li><span class="ms">groups</span><div><b>Lista de convidados</b><i>Para a portaria conferir.</i></div></li>
+        </ul>
+      </article>
+
+      <article class="fc">
+        <header><span class="fc-ic"><span class="ms">handyman</span></span><h3>Chamados e manutenção</h3><p>O problema chega na pessoa certa e não fica esquecido.</p></header>
+        <div class="fc-sep">O que tem</div>
+        <ul>
+          <li><span class="ms">add_a_photo</span><div><b>Chamado com fotos</b><i>Aberto pelo morador em segundos.</i></div></li>
+          <li><span class="ms">alt_route</span><div><b>Vai para a equipe certa</b><i>Zelador, piscineiro, jardineiro.</i></div></li>
+          <li><span class="ms">timeline</span><div><b>Status e previsão</b><i>Todo mundo acompanha.</i></div></li>
+          <li><span class="ms">star</span><div><b>Avaliação</b><i>O morador diz se ficou bom.</i></div></li>
+        </ul>
+      </article>
+
+      <article class="fc">
+        <header><span class="fc-ic"><span class="ms">forum</span></span><h3>Comunicação</h3><p>Fim da bagunça no grupo de WhatsApp.</p></header>
+        <div class="fc-sep">O que tem</div>
+        <ul>
+          <li><span class="ms">campaign</span><div><b>Avisos</b><i>Para moradores ou só para a equipe.</i></div></li>
+          <li><span class="ms">how_to_vote</span><div><b>Enquetes e assembleias</b><i>Voto pelo celular.</i></div></li>
+          <li><span class="ms">chat</span><div><b>Chat</b><i>Entre vizinhos e com funcionários.</i></div></li>
+          <li><span class="ms">diversity_3</span><div><b>Grupos da comunidade</b><i>Criados pelo síndico.</i></div></li>
+        </ul>
+      </article>
+
+      <article class="fc">
+        <header><span class="fc-ic"><span class="ms">shield</span></span><h3>Segurança e regras</h3><p>Tudo registrado, com prova e direito de resposta.</p></header>
+        <div class="fc-sep">O que tem</div>
+        <ul>
+          <li><span class="ms">emergency</span><div><b>Botão de emergência</b><i>Alerta sonoro para o prédio.</i></div></li>
+          <li><span class="ms">visibility_off</span><div><b>Ocorrências anônimas</b><i>Sem medo de denunciar.</i></div></li>
+          <li><span class="ms">gavel</span><div><b>Multas com prova</b><i>Foto, vídeo e áudio.</i></div></li>
+          <li><span class="ms">rate_review</span><div><b>Contestação pelo app</b><i>O morador se defende.</i></div></li>
+          <li><span class="ms">verified_user</span><div><b>Cadastro com aprovação</b><i>Só entra quem o síndico liberar.</i></div></li>
+        </ul>
+      </article>
+
+      <article class="fc">
+        <header><span class="fc-ic"><span class="ms">badge</span></span><h3>Equipe</h3><p>Portaria e zeladoria organizadas sem planilha.</p></header>
+        <div class="fc-sep">O que tem</div>
+        <ul>
+          <li><span class="ms">calendar_view_week</span><div><b>Escala de serviço</b><i>Modelos 12x36, 2x1 e 24/24.</i></div></li>
+          <li><span class="ms">beach_access</span><div><b>Controle de férias</b><i>Sem buraco na escala.</i></div></li>
+          <li><span class="ms">today</span><div><b>Agenda do dia</b><i>Turnos e reservas no computador.</i></div></li>
+          <li><span class="ms">checklist</span><div><b>Tarefas</b><i>Cada um vê o que é seu.</i></div></li>
+        </ul>
+      </article>
+
+      <article class="fc">
+        <header><span class="fc-ic"><span class="ms">favorite</span></span><h3>Vida em condomínio</h3><p>Vizinhança que se ajuda, dentro do app.</p></header>
+        <div class="fc-sep">O que tem</div>
+        <ul>
+          <li><span class="ms">directions_car</span><div><b>Vagas de garagem</b><i>Aluguel entre moradores.</i></div></li>
+          <li><span class="ms">search</span><div><b>Achados e perdidos</b><i>Com foto do item.</i></div></li>
+          <li><span class="ms">storefront</span><div><b>Serviços e caronas</b><i>E empréstimos entre vizinhos.</i></div></li>
+          <li><span class="ms">pool</span><div><b>Piscina</b><i>Se está liberada e o horário.</i></div></li>
+        </ul>
+      </article>
+
+      <article class="fc">
+        <header><span class="fc-ic"><span class="ms">accessibility_new</span></span><h3>Facilidade</h3><p>Para o morador de 15 e o de 85 anos.</p></header>
+        <div class="fc-sep">O que tem</div>
+        <ul>
+          <li><span class="ms">text_increase</span><div><b>Modo simplificado</b><i>Só o essencial na tela.</i></div></li>
+          <li><span class="ms">record_voice_over</span><div><b>Leitura em voz alta</b><i>Para quem enxerga pouco.</i></div></li>
+          <li><span class="ms">bolt</span><div><b>Acesso Rápido</b><i>Cada um monta o seu.</i></div></li>
+          <li><span class="ms">palette</span><div><b>12 temas de cores</b><i>Cada morador escolhe.</i></div></li>
+        </ul>
+      </article>
+      </div></div>
+      <button class="seta lado dir" id="fc-prox" aria-label="Próximo"><span class="ms">chevron_right</span></button>
+      <div class="fc-pontos" id="fc-pontos"></div>
     </div>
   </div>
 </section>
@@ -346,90 +721,105 @@
   </div>
 </section>
 
-<section id="funcoes">
+<section id="planos" class="planos">
   <div class="miolo">
-    <div class="cabeca-secao">
-      <span class="etiqueta">Funções</span>
-      <h2>Tudo o que o seu prédio precisa</h2>
-      <p class="sub">Cada função foi pensada para acabar com a confusão do dia a dia.</p>
+    <div class="cabeca-secao centro">
+      <span class="etiqueta">Planos</span>
+      <h2>Planos e valores</h2>
+      <p class="sub">O preço muda só pelo tamanho do condomínio. Nenhuma função fica de fora.</p>
     </div>
-    <div class="modulos">
-      <div class="modulo">
-        <div class="topo-m"><div class="quadro v"><span class="ms">package_2</span></div><div><h3>Encomendas</h3><span class="lema">Nada se perde na portaria</span></div></div>
-        <ul>
-          <li><span class="ms">check_circle</span>A portaria registra com fotos, transportadora, tipo e local.</li>
-          <li><span class="ms">check_circle</span>O morador recebe o aviso no app na hora.</li>
-          <li><span class="ms">check_circle</span>Retirada com PIN, QR Code ou assinatura na tela.</li>
-          <li><span class="ms">check_circle</span>Autorização para um familiar retirar.</li>
-          <li><span class="ms">check_circle</span>Alerta de encomendas paradas há 3 dias ou mais.</li>
-        </ul>
+    <div class="pl-moldura">
+      <button class="seta lado esq" id="pl-ant" aria-label="Anterior"><span class="ms">chevron_left</span></button>
+      <div class="pl-trilho" id="pl-trilho">
+
+        <article class="pl">
+          <h3><span class="ms">home</span>Plano I</h3>
+          <p class="pl-para">De 1 até 50 unidades</p>
+          <span class="pl-rotulo">Preço por mês:</span>
+          <div class="pl-preco"><b>R$ 118,15</b><small>a</small><b>R$ 322,15</b></div>
+          <div class="pl-sep">Tudo incluso</div>
+          <ul>
+            <li><span class="ms">check_circle</span>Android, iPhone e computador</li>
+            <li><span class="ms">check_circle</span>Usuários ilimitados</li>
+            <li><span class="ms">check_circle</span>Tela própria para cada perfil</li>
+            <li><span class="ms">check_circle</span>Encomendas, reservas e chamados</li>
+            <li><span class="ms">check_circle</span>Visitantes e emergência</li>
+            <li><span class="ms">check_circle</span>Avisos, enquetes e multas</li>
+          </ul>
+          <a class="botao verde" href="#contato">Contratar o Plano I</a>
+        </article>
+
+        <article class="pl pl-destaque">
+          <span class="fc-selo">Mais vendido</span>
+          <h3><span class="ms">apartment</span>Plano II</h3>
+          <p class="pl-para">De 51 até 100 unidades</p>
+          <span class="pl-rotulo">Preço por mês:</span>
+          <div class="pl-preco"><b>R$ 279,65</b><small>a</small><b>R$ 364,65</b></div>
+          <div class="pl-sep">Tudo incluso</div>
+          <ul>
+            <li><span class="ms">check_circle</span>Android, iPhone e computador</li>
+            <li><span class="ms">check_circle</span>Usuários ilimitados</li>
+            <li><span class="ms">check_circle</span>Tela própria para cada perfil</li>
+            <li><span class="ms">check_circle</span>Encomendas, reservas e chamados</li>
+            <li><span class="ms">check_circle</span>Visitantes e emergência</li>
+            <li><span class="ms">check_circle</span>Avisos, enquetes e multas</li>
+          </ul>
+          <a class="botao verde" href="#contato">Contratar o Plano II</a>
+        </article>
+
+        <article class="pl">
+          <h3><span class="ms">location_city</span>Plano III</h3>
+          <p class="pl-para">De 101 até 200 unidades</p>
+          <span class="pl-rotulo">Preço por mês:</span>
+          <div class="pl-preco"><b>R$ 330,65</b><small>a</small><b>R$ 415,65</b></div>
+          <div class="pl-sep">Tudo incluso</div>
+          <ul>
+            <li><span class="ms">check_circle</span>Android, iPhone e computador</li>
+            <li><span class="ms">check_circle</span>Usuários ilimitados</li>
+            <li><span class="ms">check_circle</span>Tela própria para cada perfil</li>
+            <li><span class="ms">check_circle</span>Encomendas, reservas e chamados</li>
+            <li><span class="ms">check_circle</span>Visitantes e emergência</li>
+            <li><span class="ms">check_circle</span>Avisos, enquetes e multas</li>
+          </ul>
+          <a class="botao verde" href="#contato">Contratar o Plano III</a>
+        </article>
+
+        <article class="pl">
+          <h3><span class="ms">domain</span>Plano IV</h3>
+          <p class="pl-para">De 201 até 300 unidades</p>
+          <span class="pl-rotulo">Preço por mês:</span>
+          <div class="pl-preco"><b>R$ 373,15</b><small>a</small><b>R$ 466,65</b></div>
+          <div class="pl-sep">Tudo incluso</div>
+          <ul>
+            <li><span class="ms">check_circle</span>Android, iPhone e computador</li>
+            <li><span class="ms">check_circle</span>Usuários ilimitados</li>
+            <li><span class="ms">check_circle</span>Tela própria para cada perfil</li>
+            <li><span class="ms">check_circle</span>Encomendas, reservas e chamados</li>
+            <li><span class="ms">check_circle</span>Visitantes e emergência</li>
+            <li><span class="ms">check_circle</span>Avisos, enquetes e multas</li>
+          </ul>
+          <a class="botao verde" href="#contato">Contratar o Plano IV</a>
+        </article>
+
+        <article class="pl">
+          <h3><span class="ms">corporate_fare</span>Plano V</h3>
+          <p class="pl-para">Acima de 300 unidades</p>
+          <span class="pl-rotulo">Preço por mês:</span>
+          <div class="pl-preco"><b>Sob consulta</b></div>
+          <div class="pl-sep">Tudo incluso</div>
+          <ul>
+            <li><span class="ms">check_circle</span>Android, iPhone e computador</li>
+            <li><span class="ms">check_circle</span>Usuários ilimitados</li>
+            <li><span class="ms">check_circle</span>Tela própria para cada perfil</li>
+            <li><span class="ms">check_circle</span>Encomendas, reservas e chamados</li>
+            <li><span class="ms">check_circle</span>Visitantes e emergência</li>
+            <li><span class="ms">check_circle</span>Avisos, enquetes e multas</li>
+          </ul>
+          <a class="botao verde" href="#contato">Pedir proposta</a>
+        </article>
+
       </div>
-      <div class="modulo">
-        <div class="topo-m"><div class="quadro a"><span class="ms">event_available</span></div><div><h3>Reservas</h3><span class="lema" style="color:#92400e">Calendário sem conflito</span></div></div>
-        <ul>
-          <li><span class="ms">check_circle</span>Calendário do mês para salão, churrasqueira e quadra.</li>
-          <li><span class="ms">check_circle</span>Espaços com fotos, regras, capacidade e taxa de limpeza.</li>
-          <li><span class="ms">check_circle</span>Pagamento por PIX ou reserva grátis.</li>
-          <li><span class="ms">check_circle</span>Lista de convidados da reserva.</li>
-          <li><span class="ms">check_circle</span>Quanto entrou em reservas no mês, no painel do síndico.</li>
-        </ul>
-      </div>
-      <div class="modulo">
-        <div class="topo-m"><div class="quadro m"><span class="ms">handyman</span></div><div><h3>Chamados</h3><span class="lema">Manutenção que anda</span></div></div>
-        <ul>
-          <li><span class="ms">check_circle</span>O morador abre o chamado com várias fotos.</li>
-          <li><span class="ms">check_circle</span>Vai direto para a equipe certa: zelador, piscineiro, jardineiro, limpeza.</li>
-          <li><span class="ms">check_circle</span>Status, responsável, previsão e avaliação no final.</li>
-        </ul>
-      </div>
-      <div class="modulo">
-        <div class="topo-m"><div class="quadro v"><span class="ms">qr_code_scanner</span></div><div><h3>Portaria e visitantes</h3><span class="lema">Entrada rápida e segura</span></div></div>
-        <ul>
-          <li><span class="ms">check_circle</span>O morador libera o visitante com convite em QR Code.</li>
-          <li><span class="ms">check_circle</span>A portaria lê o QR Code na entrada.</li>
-          <li><span class="ms">check_circle</span>Tipos de acesso diferentes no convite.</li>
-        </ul>
-      </div>
-      <div class="modulo">
-        <div class="topo-m"><div class="quadro m"><span class="ms">forum</span></div><div><h3>Comunicação</h3><span class="lema">Sem bagunça de grupo</span></div></div>
-        <ul>
-          <li><span class="ms">check_circle</span>Avisos separados para moradores e para a equipe.</li>
-          <li><span class="ms">check_circle</span>Enquetes e assembleias com voto pelo celular.</li>
-          <li><span class="ms">check_circle</span>Chat entre vizinhos e com os funcionários.</li>
-        </ul>
-      </div>
-      <div class="modulo">
-        <div class="topo-m"><div class="quadro r"><span class="ms">shield</span></div><div><h3>Segurança e regras</h3><span class="lema" style="color: var(--vermelho)">Tudo registrado</span></div></div>
-        <ul>
-          <li><span class="ms">check_circle</span>Botão de emergência com alerta sonoro para o prédio.</li>
-          <li><span class="ms">check_circle</span>Ocorrências anônimas.</li>
-          <li><span class="ms">check_circle</span>Multas e advertências com foto, vídeo e áudio. O morador contesta pelo app.</li>
-          <li><span class="ms">check_circle</span>Troca de síndico e remoção de quem saiu do prédio.</li>
-        </ul>
-      </div>
-      <div class="modulo">
-        <div class="topo-m"><div class="quadro a"><span class="ms">calendar_month</span></div><div><h3>Equipe</h3><span class="lema" style="color:#92400e">Escala sempre em dia</span></div></div>
-        <ul>
-          <li><span class="ms">check_circle</span>Escala de serviço com modelos 12x36, 2x1 e 24/24.</li>
-          <li><span class="ms">check_circle</span>Controle de férias.</li>
-          <li><span class="ms">check_circle</span>No computador: agenda do dia e calendário do mês para o síndico.</li>
-        </ul>
-      </div>
-      <div class="modulo">
-        <div class="topo-m"><div class="quadro v"><span class="ms">accessibility_new</span></div><div><h3>Facilidade de uso</h3><span class="lema">Para todas as idades</span></div></div>
-        <div class="tags">
-          <span>Modo simplificado</span><span>Leitura em voz alta</span><span>Acesso Rápido personalizável</span><span>Lembrar login</span><span>Puxar para atualizar</span><span>Foto de perfil</span>
-        </div>
-      </div>
-      <div class="modulo largo">
-        <div class="topo-m"><div class="quadro v"><span class="ms">favorite</span></div><div><h3>Vida em condomínio</h3><span class="lema">Vizinhança que se ajuda</span></div></div>
-        <div class="mini">
-          <div><span class="ms">directions_car</span><b>Vagas de garagem</b><span class="t">Aluguel entre vizinhos</span></div>
-          <div><span class="ms">search</span><b>Achados e perdidos</b><span class="t">Com foto do item</span></div>
-          <div><span class="ms">storefront</span><b>Serviços e caronas</b><span class="t">E empréstimos entre vizinhos</span></div>
-          <div><span class="ms">pool</span><b>Piscina</b><span class="t">Se está liberada e o horário</span></div>
-        </div>
-      </div>
+      <button class="seta lado dir" id="pl-prox" aria-label="Próximo"><span class="ms">chevron_right</span></button>
     </div>
   </div>
 </section>
@@ -557,6 +947,46 @@
   }
   document.querySelectorAll('.seletor button').forEach(function (b) { b.addEventListener('click', function () { mostrar(b.dataset.papel); }); });
   mostrar('morador');
+  // Carrossel do topo: desliza um cartão inteiro por vez (sem rolagem, então nunca para no meio)
+  (function () {
+    var faixa = document.getElementById('fc-faixa');
+    var cartoes = faixa.querySelectorAll('.fc');
+    var pontos = document.getElementById('fc-pontos');
+    var n = cartoes.length, i = 0, timer = null;
+    pontos.innerHTML = Array.prototype.map.call(cartoes, function () { return '<button></button>'; }).join('');
+    var botoes = pontos.querySelectorAll('button');
+    function ir(k) {
+      i = (k + n) % n;
+      faixa.style.transform = 'translateX(' + (-100 * i) + '%)';
+      botoes.forEach(function (b, x) { b.classList.toggle('on', x === i); });
+    }
+    function girar() { clearInterval(timer); timer = setInterval(function () { ir(i + 1); }, 4500); }
+    botoes.forEach(function (b, x) { b.addEventListener('click', function () { ir(x); girar(); }); });
+    document.getElementById('fc-prox').addEventListener('click', function () { ir(i + 1); girar(); });
+    document.getElementById('fc-ant').addEventListener('click', function () { ir(i - 1); girar(); });
+    var caixa = document.getElementById('fc-trilho');
+    caixa.addEventListener('mouseenter', function () { clearInterval(timer); });
+    caixa.addEventListener('mouseleave', girar);
+    // Arrastar com o dedo no celular
+    var x0 = null;
+    caixa.addEventListener('touchstart', function (e) { x0 = e.touches[0].clientX; clearInterval(timer); }, { passive: true });
+    caixa.addEventListener('touchend', function (e) {
+      if (x0 === null) return;
+      var dx = e.changedTouches[0].clientX - x0;
+      if (Math.abs(dx) > 40) ir(dx < 0 ? i + 1 : i - 1);
+      x0 = null; girar();
+    }, { passive: true });
+    ir(0); girar();
+  })();
+  // Carrossel dos planos: setas de cada lado
+  (function () {
+    var trilho = document.getElementById('pl-trilho');
+    var cartoes = trilho.querySelectorAll('.pl');
+    function passo() { return cartoes[1].offsetLeft - cartoes[0].offsetLeft; }
+    function noFim() { return trilho.scrollLeft + trilho.clientWidth >= trilho.scrollWidth - 4; }
+    document.getElementById('pl-prox').addEventListener('click', function () { trilho.scrollLeft = noFim() ? 0 : trilho.scrollLeft + passo(); });
+    document.getElementById('pl-ant').addEventListener('click', function () { trilho.scrollLeft = trilho.scrollLeft <= 4 ? trilho.scrollWidth : trilho.scrollLeft - passo(); });
+  })();
 </script>
 </body>
 </html>
