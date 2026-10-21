@@ -5,7 +5,7 @@
 <script>
   var partes = (location.hash || '#m1:/morador').slice(1).split(':');
   var pessoa = /^(m1|p1|a2|z1)$/.test(partes[0]) ? partes[0] : 'm1';
-  var rota = /^\/[a-z\/-]*$/.test(partes[1] || '') ? partes[1] : '/morador';
   try { localStorage.setItem('meucondo:usuario:v1', pessoa); } catch (e) {}
-  location.replace('/residencial-atenas-app/demo' + rota + '?moldura=1');
+  // No GitHub Pages só a página inicial da demo existe como arquivo; ela leva a pessoa logada para a tela dela.
+  location.replace('/residencial-atenas-app/demo/?moldura=1');
 </script>
