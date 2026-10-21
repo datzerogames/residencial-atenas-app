@@ -157,7 +157,7 @@
   .carrossel figcaption { text-align: center; margin-top: 12px; color: #cbd5e1; font-weight: 600; font-size: 15px; }
 
   /* Comparação */
-  .tabela { overflow-x: auto; border-radius: 16px; box-shadow: var(--sombra-2); }
+  .tabela { overflow-x: auto; border-radius: 0; border: 1px solid var(--borda); box-shadow: none; background: var(--branco); }
   table { width: 100%; min-width: 640px; border-collapse: collapse; background: var(--branco); }
   th, td { padding: 16px 20px; text-align: left; border-bottom: 1px solid var(--borda); font-size: 15px; vertical-align: top; }
   tr:last-child td { border-bottom: 0; }
@@ -180,13 +180,18 @@
 
   /* Perguntas */
   .faq { background: var(--fundo-2); }
-  .faq .miolo { max-width: 860px; }
+  .faq .miolo { max-width: 1040px; }
   details { background: var(--branco); border-radius: 14px; box-shadow: var(--sombra-1); margin-top: 10px; }
   summary { list-style: none; cursor: pointer; padding: 18px 22px; font-weight: 700; display: flex; justify-content: space-between; align-items: center; gap: 12px; }
   summary::-webkit-details-marker { display: none; }
   summary .ms { color: var(--apagado); transition: transform .2s; }
   details[open] summary .ms { transform: rotate(180deg); }
   details p { margin: 0; padding: 0 22px 18px; color: var(--texto-2); }
+  .faq-grade { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; align-items: start; }
+  .faq-grade details { margin-top: 0; border: 1px solid var(--borda); }
+  .faq-grade details[open] { border-color: var(--verde); }
+  .faq-grade summary { padding: 18px 22px; }
+  @media (max-width: 760px) { .faq-grade { grid-template-columns: 1fr; } }
 
   /* Chamada final */
   .final .caixa { border-radius: 28px; padding: 56px 32px; text-align: center; color: #fff; background: linear-gradient(135deg, var(--verde-escuro), #005236); box-shadow: 0 20px 30px -10px rgba(0, 108, 73, .35); }
@@ -252,6 +257,9 @@
   .final .sub { color: #fff1e8; }
   .final .botao.branco { color: #c2410c; }
   .final .botao.vidro { background: rgba(13, 13, 13, .2); }
+  .garantia-final { display: flex; align-items: center; justify-content: center; gap: 8px; margin: 22px 0 0; font-size: 15px; color: #fff1e8; }
+  .garantia-final .ms { font-size: 19px; }
+  .garantia-final a { color: #fff; font-weight: 800; text-decoration: underline; }
 </style>
 </head>
 <body>
@@ -265,11 +273,10 @@
     <nav>
       <a href="#diferenciais">Diferenciais</a>
       <a href="#perfis">Para quem</a>
-      <a href="#funcoes">Funções</a>
       <a href="#comparacao">Comparação</a>
       <a href="#perguntas">Perguntas</a>
     </nav>
-    <a class="botao verde" href="https://datzerogames.github.io/residencial-atenas-app/demo/"><span class="ms">rocket_launch</span>Testar grátis</a>
+    <a class="botao verde" href="#planos"><span class="ms">shopping_cart</span>Contratar</a>
   </div>
 </header>
 
@@ -285,10 +292,10 @@
         <span class="chip"><span class="ms">sync</span>Atualiza em tempo real</span>
       </div>
       <div class="acoes">
-        <a class="botao verde" href="https://datzerogames.github.io/residencial-atenas-app/demo/"><span class="ms">apartment</span>Testar o prédio de exemplo</a>
-        <a class="botao suave" href="#contato"><span class="ms" style="color: var(--verde-escuro)">chat</span>Falar no WhatsApp</a>
+        <a class="botao verde" href="#planos"><span class="ms">shopping_cart</span>Contratar a partir de R$ 118,15/mês</a>
+        <a class="botao suave" href="https://datzerogames.github.io/residencial-atenas-app/demo/"><span class="ms" style="color: var(--verde-escuro)">apartment</span>Testar grátis</a>
       </div>
-      <div class="garantia"><span class="ms">verified</span>Grátis, sem cadastro e sem cartão</div>
+      <div class="garantia"><span class="ms">verified</span>Teste grátis, sem cadastro e sem cartão</div>
     </div>
     <div class="vitrine">
       <div class="cel a"><img src="img/tela-1-inicio.png" alt="Tela inicial do morador no app"></div>
@@ -332,10 +339,7 @@
       <div class="papel">
         <div class="linha"><span class="ms" id="p-ic">home</span><h3 id="p-tit">Morador</h3></div>
         <p id="p-desc"></p>
-        <div class="dois">
-          <div><b id="p-f1"></b><span id="p-d1"></span></div>
-          <div><b id="p-f2"></b><span id="p-d2"></span></div>
-        </div>
+        <div class="dois" id="p-itens"></div>
       </div>
     </div>
     <div class="cel-papel"><div class="cel vivo"><iframe id="p-demo" title="Demonstração do app" src="https://datzerogames.github.io/residencial-atenas-app/demo/entrar-perfil.html#m1:/morador" loading="lazy"></iframe></div><div class="dica-vivo"><span class="ms">touch_app</span>Demonstração ao vivo: pode clicar</div></div>
@@ -430,24 +434,6 @@
   </div>
 </section>
 
-<section class="telas" id="telas">
-  <div class="miolo">
-    <div class="cabeca-secao">
-      <span class="etiqueta">Telas reais</span>
-      <h2>Bonito de usar, simples até para quem não gosta de app</h2>
-      <p class="sub">Estas são telas do app de verdade. Arraste para ver.</p>
-    </div>
-    <div class="carrossel">
-      <figure><div class="cel"><img src="img/tela-1-inicio.png" alt=""></div><figcaption>Início do morador</figcaption></figure>
-      <figure><div class="cel"><img src="img/tela-2-encomendas.png" alt=""></div><figcaption>Encomendas</figcaption></figure>
-      <figure><div class="cel"><img src="img/tela-3-reservas.png" alt=""></div><figcaption>Reservas</figcaption></figure>
-      <figure><div class="cel"><img src="img/tela-4-enquetes.png" alt=""></div><figcaption>Enquetes</figcaption></figure>
-      <figure><div class="cel"><img src="img/tela-5-emergencia.png" alt=""></div><figcaption>Emergência</figcaption></figure>
-      <figure><div class="cel"><img src="img/tela-6-painel-sindico.png" alt=""></div><figcaption>Painel do síndico</figcaption></figure>
-    </div>
-  </div>
-</section>
-
 <section id="comparacao">
   <div class="miolo">
     <div class="cabeca-secao">
@@ -455,17 +441,31 @@
       <h2>A diferença na prática</h2>
       <p class="sub">Compare com o jeito que a maioria dos prédios ainda funciona.</p>
     </div>
-    <div class="tabela">
-      <table>
-        <tr><th></th><th>WhatsApp, caderno e planilha</th><th class="nos">Atenas</th></tr>
-        <tr><td><b>Encomendas</b></td><td class="eles"><span class="ms">close</span>Anotadas à mão, aviso quando alguém lembra</td><td class="nos"><span class="ms">check_circle</span>Aviso no app e retirada com PIN ou QR Code</td></tr>
-        <tr><td><b>Reservas</b></td><td class="eles"><span class="ms">close</span>Lista no papel e cobrança manual</td><td class="nos"><span class="ms">check_circle</span>Calendário sem conflito e pagamento por PIX</td></tr>
-        <tr><td><b>Chamados</b></td><td class="eles"><span class="ms">close</span>Mensagem solta no grupo</td><td class="nos"><span class="ms">check_circle</span>Status, responsável e avaliação</td></tr>
-        <tr><td><b>Visitantes</b></td><td class="eles"><span class="ms">close</span>Interfone e nome no caderno</td><td class="nos"><span class="ms">check_circle</span>Convite em QR Code lido na portaria</td></tr>
-        <tr><td><b>Emergência</b></td><td class="eles"><span class="ms">close</span>Ligação por ligação</td><td class="nos"><span class="ms">check_circle</span>Alerta sonoro para o prédio inteiro</td></tr>
-        <tr><td><b>Privacidade</b></td><td class="eles"><span class="ms">close</span>Telefone de todo mundo exposto no grupo</td><td class="nos"><span class="ms">check_circle</span>Cada um vê só o que é seu</td></tr>
-        <tr><td><b>Onde funciona</b></td><td class="eles"><span class="ms">close</span>Depende de quem está com o caderno</td><td class="nos"><span class="ms">check_circle</span>Android, iPhone e computador</td></tr>
-      </table>
+    <div class="cmp-duplo">
+      <article class="cmp-col cmp-antes-col">
+        <header><span class="cmp-ic"><span class="ms">chat</span></span><h3>WhatsApp, caderno e planilha</h3></header>
+        <ul>
+          <li><span class="ms">close</span><div><b>Encomendas</b><i>Anotadas à mão, aviso quando alguém lembra</i></div></li>
+          <li><span class="ms">close</span><div><b>Reservas</b><i>Lista no papel e cobrança manual</i></div></li>
+          <li><span class="ms">close</span><div><b>Chamados</b><i>Mensagem solta no grupo</i></div></li>
+          <li><span class="ms">close</span><div><b>Visitantes</b><i>Interfone e nome no caderno</i></div></li>
+          <li><span class="ms">close</span><div><b>Emergência</b><i>Ligação por ligação</i></div></li>
+          <li><span class="ms">close</span><div><b>Privacidade</b><i>Telefone de todo mundo exposto no grupo</i></div></li>
+          <li><span class="ms">close</span><div><b>Onde funciona</b><i>Depende de quem está com o caderno</i></div></li>
+        </ul>
+      </article>
+      <article class="cmp-col cmp-depois-col">
+        <header><span class="cmp-ic"><span class="ms">apartment</span></span><h3>Atenas</h3></header>
+        <ul>
+          <li><span class="ms">check_circle</span><div><b>Encomendas</b><i>Aviso no app e retirada com PIN ou QR Code</i></div></li>
+          <li><span class="ms">check_circle</span><div><b>Reservas</b><i>Calendário sem conflito e pagamento por PIX</i></div></li>
+          <li><span class="ms">check_circle</span><div><b>Chamados</b><i>Status, responsável e avaliação</i></div></li>
+          <li><span class="ms">check_circle</span><div><b>Visitantes</b><i>Convite em QR Code lido na portaria</i></div></li>
+          <li><span class="ms">check_circle</span><div><b>Emergência</b><i>Alerta sonoro para o prédio inteiro</i></div></li>
+          <li><span class="ms">check_circle</span><div><b>Privacidade</b><i>Cada um vê só o que é seu</i></div></li>
+          <li><span class="ms">check_circle</span><div><b>Onde funciona</b><i>Android, iPhone e computador</i></div></li>
+        </ul>
+      </article>
     </div>
   </div>
 </section>
@@ -491,12 +491,14 @@
       <span class="etiqueta">Tire suas dúvidas</span>
       <h2>Perguntas frequentes</h2>
     </div>
-    <details><summary>Como funciona a demonstração grátis?<span class="ms">expand_more</span></summary><p>Você entra num prédio de exemplo e pode ver as telas de morador, portaria, zeladoria e síndico, sem cadastro e sem cartão.</p></details>
+    <div class="faq-grade">
+    <details open><summary>Como funciona a demonstração grátis?<span class="ms">expand_more</span></summary><p>Você entra num prédio de exemplo e pode ver as telas de morador, portaria, zeladoria e síndico, sem cadastro e sem cartão.</p></details>
     <details><summary>Os moradores mais velhos conseguem usar?<span class="ms">expand_more</span></summary><p>Sim. Tem modo simplificado, leitura em voz alta e um Acesso Rápido que mostra só o que a pessoa mais usa.</p></details>
     <details><summary>O app pesa no celular?<span class="ms">expand_more</span></summary><p>Não. As fotos são reduzidas para cerca de 100 KB antes de enviar, e o aparelho guarda só o histórico recente.</p></details>
     <details><summary>Funciona no iPhone?<span class="ms">expand_more</span></summary><p>Sim, pelo navegador do iPhone, sem precisar baixar da loja. Dá para colocar um atalho na tela inicial.</p></details>
     <details><summary>Preciso instalar alguma coisa no prédio?<span class="ms">expand_more</span></summary><p>Não. Basta o celular da portaria e dos moradores. O síndico também pode usar pelo computador.</p></details>
-    <details><summary>Quanto custa?<span class="ms">expand_more</span></summary><p>[PREÇO A DEFINIR]</p></details>
+    <details><summary>Quanto custa?<span class="ms">expand_more</span></summary><p>Os valores estão na seção Planos. São 4 faixas de preço por mês, de acordo com o tamanho do condomínio, e todas incluem todas as funções. Para uma proposta sob medida, fale com a gente.</p></details>
+    </div>
   </div>
 </section>
 
@@ -504,12 +506,13 @@
   <div class="miolo">
     <div class="caixa">
       <span class="ms grande">apartment</span>
-      <h2>Modernize a rotina do seu condomínio</h2>
-      <p class="sub">Teste o prédio de exemplo agora ou fale com a gente para ver o app com o nome do seu condomínio.</p>
+      <h2>Leve o Atenas para o seu condomínio</h2>
+      <p class="sub">Veja o app com o nome e as cores do seu prédio. Você recebe uma proposta sob medida, sem compromisso.</p>
       <div class="acoes">
-        <a class="botao branco" href="https://datzerogames.github.io/residencial-atenas-app/demo/"><span class="ms">play_circle</span>Abrir a demonstração</a>
-        <a class="botao vidro" href="#"><span class="ms">chat</span>WhatsApp [NÚMERO A DEFINIR]</a>
+        <a class="botao branco" href="#planos"><span class="ms">shopping_cart</span>Ver planos e preços</a>
+        <a class="botao vidro" href="https://datzerogames.github.io/residencial-atenas-app/demo/"><span class="ms">play_circle</span>Testar grátis</a>
       </div>
+      <p class="garantia-final"><span class="ms">chat</span>Prefere conversar? Fale pelo WhatsApp <a href="https://wa.me/5521977118946" target="_blank" rel="noopener">(21) 97711-8946</a></p>
     </div>
   </div>
 </section>
@@ -519,24 +522,28 @@
 </footer>
 
 <div class="barra-cel">
-  <a class="botao zap" href="#contato" aria-label="Falar no WhatsApp"><span class="ms">chat</span></a>
-  <a class="botao verde" href="https://datzerogames.github.io/residencial-atenas-app/demo/"><span class="ms">rocket_launch</span>Testar grátis agora</a>
+  <a class="botao suave" href="https://datzerogames.github.io/residencial-atenas-app/demo/">Testar grátis</a>
+  <a class="botao verde" href="#planos"><span class="ms">shopping_cart</span>Contratar</a>
 </div>
 
 <script>
   var PAPEIS = {
     morador: { ic: 'home', tit: 'Morador', demo: 'm1:/morador',
       desc: 'Vê as encomendas que chegaram, reserva o salão pagando com PIX, libera visitantes e acompanha os avisos do prédio.',
-      f1: 'Encomendas', d1: 'Aviso e PIN de retirada', f2: 'Reserva com PIX', d2: 'Sem fila e sem papel' },
+      itens: [['Encomendas', 'Aviso e PIN de retirada'], ['Reserva com PIX', 'Sem fila e sem papel'], ['Liberar visitante', 'Convite em QR Code'], ['Abrir chamado', 'Com fotos e avaliação'],
+        ['Votar em enquetes', 'Assembleia pelo celular'], ['Botão de emergência', 'Alerta para o prédio'], ['Contestar multa', 'Defesa pelo app'], ['Vagas e caronas', 'Entre vizinhos']] },
     portaria: { ic: 'local_shipping', tit: 'Portaria', demo: 'p1:/portaria',
       desc: 'Registra encomendas com fotos, entrega com PIN ou assinatura e confere os visitantes lendo o QR Code.',
-      f1: 'Várias fotos', d1: 'Pacote registrado sem erro', f2: 'Leitor de QR Code', d2: 'Entrada sem fila' },
+      itens: [['Várias fotos', 'Pacote registrado sem erro'], ['Leitor de QR Code', 'Entrada sem fila'], ['Entrega com PIN', 'Ou assinatura na tela'], ['Encomendas paradas', 'Alerta de 3 dias ou mais'],
+        ['Familiar autorizado', 'Quem pode retirar'], ['Avisos da equipe', 'Comunicados do síndico'], ['Escala do turno', 'Quem trabalha hoje'], ['Botão de emergência', 'Alerta para o prédio']] },
     zeladoria: { ic: 'handyman', tit: 'Zeladoria', demo: 'z1:/zelador',
       desc: 'Recebe os chamados da sua área, informa a previsão, conclui as tarefas e consulta a escala de serviço.',
-      f1: 'Chamados por área', d1: 'Limpeza, piscina, jardim', f2: 'Escala da equipe', d2: '12x36, 2x1, 24/24' },
+      itens: [['Chamados por área', 'Limpeza, piscina, jardim'], ['Previsão e conclusão', 'O morador acompanha'], ['Lista de tarefas', 'O que fazer hoje'], ['Escala da equipe', '12x36, 2x1, 24/24'],
+        ['Férias', 'Sem buraco na escala'], ['Avisos da equipe', 'Comunicados do síndico'], ['Chat com o síndico', 'Sem depender de recado'], ['Botão de emergência', 'Alerta para o prédio']] },
     sindico: { ic: 'admin_panel_settings', tit: 'Síndico', demo: 'a2:/admin',
       desc: 'Acompanha tudo pelo painel, aprova cadastros e reservas, aplica multas com prova e faz enquetes e assembleias.',
-      f1: 'Multas com prova', d1: 'Foto, vídeo e áudio', f2: 'Enquetes', d2: 'Voto pelo celular' }
+      itens: [['Painel do condomínio', 'Resumo de tudo numa tela'], ['Aprovar cadastros', 'Só entra quem você liberar'], ['Aprovar reservas', 'E bloquear datas'], ['Direcionar chamados', 'Para a equipe certa'],
+        ['Multas com prova', 'Foto, vídeo e áudio'], ['Enquetes e assembleias', 'Voto pelo celular'], ['Avisos', 'Para moradores ou equipe'], ['Agenda do dia', 'Turnos e reservas no computador']] }
   };
   var primeira = true;
   function mostrar(nome) {
@@ -545,10 +552,7 @@
     document.getElementById('p-ic').textContent = p.ic;
     document.getElementById('p-tit').textContent = p.tit;
     document.getElementById('p-desc').textContent = p.desc;
-    document.getElementById('p-f1').textContent = p.f1;
-    document.getElementById('p-d1').textContent = p.d1;
-    document.getElementById('p-f2').textContent = p.f2;
-    document.getElementById('p-d2').textContent = p.d2;
+    document.getElementById('p-itens').innerHTML = p.itens.map(function (i) { return '<div><b>' + i[0] + '</b><span>' + i[1] + '</span></div>'; }).join('');
     if (primeira) primeira = false; else document.getElementById('p-demo').src = 'https://datzerogames.github.io/residencial-atenas-app/demo/entrar-perfil.html#' + p.demo;
   }
   document.querySelectorAll('.seletor button').forEach(function (b) { b.addEventListener('click', function () { mostrar(b.dataset.papel); }); });
