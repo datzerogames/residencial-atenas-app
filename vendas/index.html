@@ -530,6 +530,15 @@
   .plataformas .destaque { margin-top: 120px; }
   /* Quadradinhos de ícone redondos (círculos) */
   .fc-ic, .cmp-ic, .quadro, .papel .linha .ms, .lista-plat .quadro, .plataformas .quadro, .o1 .c .q i { border-radius: 50% !important; }
+  /* Moldura do iPhone 18 Pro Max no celular de demonstração */
+  .perfis .cel.vivo { width: 290px; height: 627px; border-radius: 52px; border: 10px solid #111; background: #111; box-shadow: 0 24px 40px -12px rgba(13, 13, 13, .45); }
+  .perfis .cel.vivo::before { content: ""; position: absolute; top: 12px; left: 50%; transform: translateX(-50%); width: 92px; height: 26px; background: #000; border-radius: 20px; z-index: 5; }
+  .perfis .cel.vivo iframe { width: 430px; height: 932px; border: 0; transform: scale(.628); transform-origin: 0 0; display: block; border-radius: 42px; }
+  /* Celular de demonstração mais largo */
+  .perfis .miolo { grid-template-columns: 420px 340px; }
+  .perfis .cel-papel { width: 340px; }
+  .perfis .cel.vivo { width: 330px; height: 713px; }
+  .perfis .cel.vivo iframe { transform: scale(.707); }
 </style>
 </head>
 <body>
