@@ -1,0 +1,11 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Entrando na demonstração</title>
+<!-- Usado pelo site de vendas: entra na demo como uma pessoa de exemplo e abre uma tela. Ex.: entrar-perfil.html#m1:/morador -->
+<script>
+  var partes = (location.hash || '#m1:/morador').slice(1).split(':');
+  var pessoa = /^(m1|p1|a2|z1)$/.test(partes[0]) ? partes[0] : 'm1';
+  var rota = /^\/[a-z\/-]*$/.test(partes[1] || '') ? partes[1] : '/morador';
+  try { localStorage.setItem('meucondo:usuario:v1', pessoa); } catch (e) {}
+  location.replace('/residencial-atenas-app/demo' + rota + '?moldura=1');
+</script>
